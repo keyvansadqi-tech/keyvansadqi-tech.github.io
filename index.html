@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bullet Journal</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2d4a3e">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#f5f3ef;--surface:#fff;--surface-alt:#faf8f5;--text:#1a1a1a;--text-secondary:#6b6b6b;--text-muted:#9a9a9a;--border:#e8e5df;--border-light:#f0ede7;--accent:#2d4a3e;--accent-light:#3d6354;--accent-bg:#e8efe9;--success:#2d7a4f;--danger:#c54545;--warning:#b8860b;--radius-sm:8px;--radius:12px;--radius-lg:16px;--radius-xl:20px}
+body{font-family:'Vazirmatn','Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:14px;line-height:1.6}
+body.en{direction:ltr;font-family:'Inter','Vazirmatn',sans-serif}
+.onboarding{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.onboarding.show{display:flex}
+.onboarding-card{background:var(--surface);border-radius:var(--radius-xl);padding:28px 24px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto}
+.onboarding-header{text-align:center;margin-bottom:20px}
+.onboarding-logo{width:56px;height:56px;background:var(--accent);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.onboarding-logo svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:2}
+.onboarding-title{font-size:20px;font-weight:700;margin-bottom:4px}
+.onboarding-subtitle{font-size:12px;color:var(--text-muted)}
+.onboarding-points{margin-bottom:18px}
+.onboarding-point{display:flex;gap:12px;padding:12px;background:var(--surface-alt);border-radius:var(--radius-sm);margin-bottom:8px;border:1px solid var(--border-light)}
+.onboarding-point-icon{width:32px;height:32px;background:var(--accent-bg);color:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.onboarding-point-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.onboarding-point-content{flex:1;min-width:0}
+.onboarding-point-title{font-size:13px;font-weight:600;margin-bottom:2px}
+.onboarding-point-desc{font-size:11px;color:var(--text-secondary);line-height:1.5}
+.onboarding-symbols{background:var(--surface-alt);border-radius:var(--radius-sm);padding:12px;margin-bottom:16px;border:1px solid var(--border-light)}
+.onboarding-symbols-title{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.onboarding-symbols-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.onboarding-symbol{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-secondary)}
+.onboarding-symbol-mark{width:22px;height:22px;background:var(--surface);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.checkbox-label{display:flex;align-items:center;gap:12px;cursor:pointer;padding:14px;background:var(--accent-bg);border-radius:var(--radius-sm);margin-bottom:12px;border:1.5px solid transparent;user-select:none}
+.checkbox-label.checked{border-color:var(--accent)}
+.checkbox-label input{position:absolute;opacity:0;pointer-events:none}
+.checkbox-custom{width:24px;height:24px;border:2px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--surface);flex-shrink:0}
+.checkbox-label.checked .checkbox-custom{background:var(--accent);border-color:var(--accent)}
+.checkbox-custom svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:3;opacity:0;transform:scale(.5)}
+.checkbox-label.checked .checkbox-custom svg{opacity:1;transform:scale(1)}
+.checkbox-text{font-size:14px;font-weight:500;flex:1}
+.start-btn{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
+.start-btn:disabled{opacity:.4;cursor:not-allowed;background:var(--text-muted)}
+.start-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+body.en .start-btn svg{transform:rotate(180deg)}
+.auth-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:var(--bg)}
+.auth-screen.hidden{display:none}
+.auth-logo{width:64px;height:64px;background:var(--accent);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.auth-logo svg{width:32px;height:32px;stroke:#fff;fill:none;stroke-width:2}
+.auth-title{font-size:24px;font-weight:700;margin-bottom:6px}
+.auth-subtitle{font-size:13px;color:var(--text-muted);margin-bottom:32px}
+.auth-card{background:var(--surface);border-radius:var(--radius-xl);padding:28px 24px;width:100%;max-width:380px;border:1px solid var(--border-light)}
+.auth-tabs{display:flex;background:var(--surface-alt);border-radius:var(--radius-sm);padding:3px;margin-bottom:24px;border:1px solid var(--border-light)}
+.auth-tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border-radius:6px;border:none;background:none;font-family:inherit}
+.auth-tab.active{background:var(--surface);color:var(--text)}
+.auth-form{display:none}
+.auth-form.active{display:block}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:6px}
+.form-label .required{color:var(--danger)}
+.form-label .optional{color:var(--text-muted);font-weight:400;font-size:11px}
+.form-input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--surface);font-family:inherit;color:var(--text)}
+.form-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.form-hint{font-size:11px;color:var(--text-muted);margin-top:4px}
+.form-hint.warning{color:var(--warning)}
+.auth-btn{width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px}
+.auth-btn:disabled{opacity:.5;cursor:not-allowed}
+.auth-error,.auth-success{padding:10px 12px;border-radius:var(--radius-sm);font-size:12px;margin-bottom:14px;display:none}
+.auth-error{background:rgba(197,69,69,.08);color:var(--danger);border:1px solid rgba(197,69,69,.15)}
+.auth-success{background:rgba(45,122,79,.08);color:var(--success);border:1px solid rgba(45,122,79,.15)}
+.auth-error.show,.auth-success.show{display:block}
+.auth-lang{position:absolute;top:20px;left:20px;background:var(--surface);border:1px solid var(--border);color:var(--text-secondary);padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-weight:500;font-family:inherit;z-index:10}
+body.en .auth-lang{left:auto;right:20px}
+.auth-footer{margin-top:24px;font-size:11px;color:var(--text-muted);text-align:center}
+
+/* Password Strength */
+.pw-strength{margin-top:6px;display:flex;gap:4px;align-items:center}
+.pw-strength-bar{flex:1;height:4px;background:var(--border-light);border-radius:2px;overflow:hidden}
+.pw-strength-fill{height:100%;transition:all .3s;border-radius:2px}
+.pw-strength-text{font-size:10px;font-weight:600;min-width:40px;text-align:left}
+body.en .pw-strength-text{text-align:right}
+.strength-weak .pw-strength-fill{background:var(--danger);width:25%}
+.strength-fair .pw-strength-fill{background:var(--warning);width:50%}
+.strength-good .pw-strength-fill{background:#7ba88f;width:75%}
+.strength-strong .pw-strength-fill{background:var(--success);width:100%}
+
+/* Lock Screen */
+.lock-screen{position:fixed;inset:0;background:var(--bg);z-index:400;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.lock-screen.show{display:flex}
+.lock-logo{width:72px;height:72px;background:var(--accent);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.lock-logo svg{width:36px;height:36px;stroke:#fff;fill:none;stroke-width:2}
+.lock-title{font-size:20px;font-weight:700;margin-bottom:6px}
+.lock-subtitle{font-size:12px;color:var(--text-muted);margin-bottom:24px;text-align:center}
+.lock-card{background:var(--surface);border-radius:var(--radius-xl);padding:24px;width:100%;max-width:340px;border:1px solid var(--border-light)}
+.lock-attempts{font-size:11px;color:var(--danger);text-align:center;margin-top:10px;min-height:16px}
+.lock-timer{font-size:12px;color:var(--warning);text-align:center;margin-top:10px;font-weight:600}
+
+/* PIN Pad */
+.pin-display{display:flex;gap:8px;justify-content:center;margin:16px 0;direction:ltr}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);background:var(--surface)}
+.pin-dot.filled{background:var(--accent);border-color:var(--accent)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.pin-key{aspect-ratio:1.3;background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:20px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text);transition:all .1s}
+.pin-key:active{background:var(--accent);color:#fff;transform:scale(.95)}
+.pin-key.empty{background:transparent;border:none;cursor:default}
+.pin-key.empty:active{background:transparent;color:var(--text);transform:none}
+
+/* Security Badge */
+.security-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:12px;font-size:10px;font-weight:600}
+.security-badge.encrypted{background:rgba(45,122,79,.1);color:var(--success)}
+.security-badge svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5}
+
+.app-screen{display:none;padding-bottom:90px}
+.app-screen.active{display:block}
+.header{background:var(--surface);border-bottom:1px solid var(--border-light);padding:18px 20px 16px;position:sticky;top:0;z-index:100}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.header-right{display:flex;align-items:center;gap:6px}
+.header h1{font-size:20px;font-weight:600}
+.header-date{font-size:12px;color:var(--text-muted)}
+.header-btn{background:transparent;border:1px solid var(--border);color:var(--text-secondary);padding:6px 10px;border-radius:20px;font-size:11px;cursor:pointer;font-weight:500;font-family:inherit;display:flex;align-items:center;gap:4px}
+.header-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.user-badge{background:var(--accent-bg);color:var(--accent);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer}
+.user-avatar-small{width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.user-avatar-small img{width:100%;height:100%;object-fit:cover}
+.container{padding:20px 16px;max-width:600px;margin:0 auto}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+.stat-card{background:var(--surface);padding:16px;border-radius:var(--radius);border:1px solid var(--border-light)}
+.stat-number{font-size:28px;font-weight:600;color:var(--accent);line-height:1}
+.stat-label{font-size:11px;color:var(--text-muted);margin-top:6px}
+.section{background:var(--surface);border-radius:var(--radius-lg);padding:18px;margin-bottom:14px;border:1px solid var(--border-light)}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border-light)}
+.section-icon{width:32px;height:32px;background:var(--accent-bg);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0}
+.section-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+.section-title{font-size:15px;font-weight:600}
+.bullet-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:var(--radius-sm);margin-bottom:6px;background:var(--surface-alt)}
+.bullet-symbol{width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:600;border-radius:50%;background:var(--surface);border:1.5px solid var(--border);flex-shrink:0;margin-top:1px}
+.bullet-symbol.completed{background:var(--accent);color:#fff;border-color:var(--accent)}
+.bullet-symbol.migrated,.bullet-symbol.scheduled{background:var(--warning);color:#fff;border-color:var(--warning)}
+.bullet-content{flex:1;min-width:0}
+.bullet-text{font-size:14px;line-height:1.5;word-break:break-word}
+.bullet-text.completed{text-decoration:line-through;color:var(--text-muted)}
+.bullet-text.migrated{color:var(--text-secondary);font-style:italic}
+.bullet-meta{font-size:11px;color:var(--text-muted);margin-top:4px}
+.delete-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;padding:4px 6px;opacity:.5}
+.delete-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.symbol-picker{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}
+.symbol-btn{background:var(--surface);border:1px solid var(--border);padding:8px 12px;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--text-secondary);font-family:inherit;font-weight:500}
+.symbol-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.symbol-btn .sym{width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.add-form{display:flex;gap:8px;margin-top:14px}
+.add-form input,.add-form select{flex:1;padding:11px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--surface);font-family:inherit;color:var(--text)}
+.add-form input:focus,.add-form select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.add-form button{background:var(--accent);color:#fff;border:none;padding:11px 18px;border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-weight:500;font-family:inherit;white-space:nowrap}
+.habit-item{margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border-light)}
+.habit-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.habit-name{font-size:14px;font-weight:500;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.habit-delete{background:none;border:none;color:var(--text-muted);cursor:pointer;padding:4px;opacity:.5}
+.habit-delete svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.habit-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.habit-day{aspect-ratio:1;background:var(--surface-alt);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;border:1px solid var(--border-light);color:var(--text-secondary);font-weight:500}
+.habit-day.done{background:var(--accent);color:#fff;border-color:var(--accent)}
+.habit-day.today{border:1.5px solid var(--accent);font-weight:600}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);display:flex;justify-content:space-around;padding:6px 2px 10px;border-top:1px solid var(--border-light);z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 2px;color:var(--text-muted);font-size:8px;border:none;background:none;font-family:inherit;font-weight:500;min-width:34px;flex:1}
+.nav-item.active{color:var(--accent)}
+.nav-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.nav-icon svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8}
+.page{display:none}.page.active{display:block}
+.guide-section{margin-bottom:22px}.guide-section:last-child{margin-bottom:0}
+.guide-section h3{color:var(--accent);margin-bottom:10px;font-size:14px;font-weight:600}
+.guide-section p{font-size:13px;line-height:1.8;color:var(--text-secondary);margin-bottom:8px}
+.guide-section p strong{color:var(--text);font-weight:600}
+.symbol-list{background:var(--surface-alt);padding:14px;border-radius:var(--radius);margin:12px 0;border:1px solid var(--border-light)}
+.symbol-list-item{display:flex;align-items:center;gap:14px;padding:8px 0;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border-light)}
+.symbol-list-item:last-child{border-bottom:none}
+.symbol-list-item .sym-box{width:28px;height:28px;background:var(--surface);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:14px}
+.collection-card{background:linear-gradient(135deg,var(--accent),var(--accent-light));color:#fff;padding:18px;border-radius:var(--radius);margin-bottom:10px;cursor:pointer}
+.collection-card h4{font-size:15px;margin-bottom:4px;font-weight:600}
+.collection-card p{font-size:12px;opacity:.85}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.modal.active{display:flex}
+.modal-content{background:var(--surface);border-radius:var(--radius-xl) var(--radius-xl) 0 0;padding:22px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto}
+.modal-content h3{margin-bottom:16px;font-size:17px;font-weight:600}
+.modal-content input,.modal-content textarea,.modal-content select{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:12px;font-family:inherit;font-size:14px;background:var(--surface);color:var(--text)}
+.modal-content textarea{resize:vertical;min-height:100px}
+.modal-content input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.modal-buttons{display:flex;gap:8px;margin-top:14px}
+.modal-buttons button{flex:1;padding:12px;border:none;border-radius:var(--radius-sm);cursor:pointer;font-weight:500;font-family:inherit;font-size:14px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-secondary{background:var(--surface-alt);color:var(--text);border:1px solid var(--border)!important}
+.btn-danger{background:var(--danger);color:#fff}
+.empty-state{text-align:center;padding:30px 20px;color:var(--text-muted);font-size:13px}
+.empty-state-icon{width:48px;height:48px;margin:0 auto 12px;background:var(--surface-alt);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted)}
+.empty-state-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+.future-month-group{margin-bottom:16px}
+.future-month-title{font-size:12px;font-weight:600;color:var(--accent);margin-bottom:8px;padding:6px 10px;background:var(--accent-bg);border-radius:6px;display:inline-block}
+.settings-profile{display:flex;flex-direction:column;align-items:center;padding:20px 0;margin-bottom:16px;border-bottom:1px solid var(--border-light)}
+.avatar-container{position:relative;margin-bottom:14px}
+.avatar-large{width:88px;height:88px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:600;overflow:hidden;border:3px solid var(--surface);box-shadow:0 0 0 2px var(--accent)}
+.avatar-large img{width:100%;height:100%;object-fit:cover}
+.avatar-edit-btn{position:absolute;bottom:0;right:0;width:28px;height:28px;background:var(--accent);border:2px solid var(--surface);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff}
+body.en .avatar-edit-btn{right:auto;left:0}
+.avatar-edit-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.profile-name{font-size:17px;font-weight:600;margin-bottom:2px}
+.profile-username{font-size:12px;color:var(--text-muted)}
+.settings-group{margin-bottom:20px}
+.settings-group-title{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding:0 4px}
+.settings-list{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border-light);overflow:hidden}
+.settings-item{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;border-bottom:1px solid var(--border-light);background:none;border:none;width:100%;text-align:inherit;font-family:inherit;font-size:14px;color:var(--text)}
+.settings-item:last-child{border-bottom:none}
+.settings-item-icon{width:32px;height:32px;border-radius:var(--radius-sm);background:var(--accent-bg);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.settings-item-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.settings-item-icon.danger{background:rgba(197,69,69,.1);color:var(--danger)}
+.settings-item-icon.success{background:rgba(45,122,79,.1);color:var(--success)}
+.settings-item-content{flex:1;min-width:0}
+.settings-item-title{font-size:14px;font-weight:500;margin-bottom:1px}
+.settings-item-title.danger{color:var(--danger)}
+.settings-item-desc{font-size:11px;color:var(--text-muted)}
+.settings-item-arrow{color:var(--text-muted);flex-shrink:0}
+.settings-item-arrow svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+body.en .settings-item-arrow{transform:rotate(180deg)}
+.avatar-picker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.avatar-option{aspect-ratio:1;border-radius:50%;cursor:pointer;overflow:hidden;border:2px solid transparent}
+.avatar-option.selected{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+.upload-avatar-btn{width:100%;padding:12px;background:var(--surface-alt);border:1px dashed var(--border);border-radius:var(--radius-sm);color:var(--text-secondary);font-family:inherit;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px}
+.upload-avatar-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.theme-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+.theme-option{padding:14px;border-radius:var(--radius);cursor:pointer;border:2px solid var(--border-light);display:flex;align-items:center;gap:10px}
+.theme-option.selected{border-color:var(--accent);background:var(--accent-bg)}
+.theme-preview{width:32px;height:32px;border-radius:50%;flex-shrink:0}
+.theme-name{font-size:13px;font-weight:500}
+.account-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.account-stat{background:var(--surface-alt);padding:12px 8px;border-radius:var(--radius-sm);text-align:center}
+.account-stat-num{font-size:18px;font-weight:600;color:var(--accent);line-height:1}
+.account-stat-label{font-size:10px;color:var(--text-muted);margin-top:4px}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--text);color:var(--surface);padding:10px 18px;border-radius:20px;font-size:13px;font-weight:500;z-index:500;opacity:0;transition:all .3s;pointer-events:none;max-width:80%;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.chart-container{background:var(--surface);border-radius:var(--radius);padding:16px;border:1px solid var(--border-light);margin-bottom:14px}
+.chart-title{font-size:13px;font-weight:600;margin-bottom:12px}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:100px;padding-top:10px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%}
+.bar-wrapper{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.bar{width:100%;max-width:28px;border-radius:4px 4px 0 0;background:var(--accent);transition:height .5s;min-height:2px}
+.bar-value{font-size:9px;font-weight:600;color:var(--accent)}
+.bar-label{font-size:9px;color:var(--text-muted);white-space:nowrap}
+.goal-card{background:var(--surface);border-radius:var(--radius);padding:16px;border:1px solid var(--border-light);margin-bottom:10px;cursor:pointer}
+.goal-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.goal-title{font-size:15px;font-weight:600;flex:1}
+.goal-percent{font-size:20px;font-weight:700;color:var(--accent);min-width:50px;text-align:left}
+.goal-dates{font-size:11px;color:var(--text-muted);margin-bottom:10px}
+.progress-bar-bg{width:100%;height:8px;background:var(--border-light);border-radius:4px;overflow:hidden;margin-bottom:8px}
+.progress-bar-fill{height:100%;border-radius:4px;transition:width .5s}
+.milestone{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;color:var(--text-secondary)}
+.milestone-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.milestone-dot.done{background:var(--accent);border-color:var(--accent)}
+.milestone-dot svg{width:10px;height:10px;stroke:#fff;fill:none;stroke-width:3;opacity:0}
+.milestone-dot.done svg{opacity:1}
+.milestone-text.done{text-decoration:line-through;color:var(--text-muted)}
+.goal-color-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.color-picker-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.color-option{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent}
+.color-option.selected{border-color:var(--text);transform:scale(1.15)}
+.slider-container{margin-bottom:12px}
+.slider-container label{font-size:12px;color:var(--text-secondary);display:flex;justify-content:space-between;margin-bottom:4px}
+.slider-container input[type=range]{width:100%;accent-color:var(--accent)}
+.search-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:none;backdrop-filter:blur(4px)}
+.search-overlay.show{display:block}
+.search-panel{position:fixed;top:0;left:0;right:0;background:var(--surface);z-index:301;padding:16px;transform:translateY(-100%);transition:transform .3s;max-height:90vh;overflow-y:auto;border-radius:0 0 var(--radius-xl) var(--radius-xl)}
+.search-panel.show{transform:translateY(0)}
+.search-input-row{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.search-input{flex:1;padding:12px 14px;border:1.5px solid var(--accent);border-radius:var(--radius-sm);font-size:15px;background:var(--surface);font-family:inherit;color:var(--text)}
+.search-input:focus{outline:none;box-shadow:0 0 0 3px var(--accent-bg)}
+.search-close{background:none;border:none;color:var(--text-muted);cursor:pointer;padding:8px}
+.search-close svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2}
+.search-filters{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.search-filter{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);font-family:inherit}
+.search-filter.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.search-results{max-height:60vh;overflow-y:auto}
+.search-result-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--radius-sm);border-bottom:1px solid var(--border-light)}
+.search-result-icon{width:32px;height:32px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;font-weight:700}
+.search-result-content{flex:1;min-width:0}
+.search-result-text{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-result-meta{font-size:11px;color:var(--text-muted)}
+.search-empty{text-align:center;padding:30px;color:var(--text-muted);font-size:13px}
+
+/* Security Status Card */
+.security-status-card{background:linear-gradient(135deg,var(--accent-bg),var(--surface-alt));border:1px solid var(--accent);border-radius:var(--radius);padding:16px;margin-bottom:14px}
+.security-status-title{font-size:13px;font-weight:600;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.security-status-title svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.security-status-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:12px}
+.security-status-row span:first-child{color:var(--text-secondary)}
+.security-status-row span:last-child{font-weight:600}
+.security-status-row .ok{color:var(--success)}
+.security-status-row .warn{color:var(--warning)}
+
+::-webkit-scrollbar{width:0;height:0}
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div class="lock-screen" id="lockScreen">
+<div class="lock-logo"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+<div class="lock-title" data-i18n="lockTitle">قفل شده</div>
+<div class="lock-subtitle" data-i18n="lockSubtitle">برای ادامه وارد شوید</div>
+<div class="lock-card">
+  <div id="lockMethodPassword">
+    <div class="form-group"><label class="form-label" data-i18n="password">رمز عبور</label><input type="password" class="form-input" id="lockPwInput" placeholder="••••••••" autocomplete="current-password"></div>
+    <button class="auth-btn" onclick="unlockWithPassword()" data-i18n="unlockBtn">باز کردن</button>
+    <div class="lock-attempts" id="lockAttempts"></div>
+    <div class="lock-timer" id="lockTimer"></div>
+  </div>
+  <div id="lockMethodPin" style="display:none">
+    <div class="pin-display" id="pinDisplay"></div>
+    <div class="pin-pad" id="pinPad"></div>
+    <div class="lock-attempts" id="pinLockAttempts"></div>
+    <div class="lock-timer" id="pinLockTimer"></div>
+  </div>
+</div>
+</div>
+
+<!-- ONBOARDING -->
+<div class="onboarding" id="onboarding"><div class="onboarding-card"><div class="onboarding-header"><div class="onboarding-logo"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><div class="onboarding-title" data-i18n="onboardingTitle">آموزش سریع</div><div class="onboarding-subtitle" data-i18n="onboardingSubtitle">قبل از شروع، چند نکته کوتاه را بخوانید</div></div><div class="onboarding-points" id="onboardingPoints"></div><div class="onboarding-symbols"><div class="onboarding-symbols-title" data-i18n="symbolsTitle">نمادهای بولت ژورنال</div><div class="onboarding-symbols-grid"><div class="onboarding-symbol"><div class="onboarding-symbol-mark">•</div><span data-i18n="symTask">وظیفه</span></div><div class="onboarding-symbol"><div class="onboarding-symbol-mark">×</div><span data-i18n="symDone">انجام شد</span></div><div class="onboarding-symbol"><div class="onboarding-symbol-mark">›</div><span data-i18n="symMigrated">منتقل شد</span></div><div class="onboarding-symbol"><div class="onboarding-symbol-mark">O</div><span data-i18n="symEvent">رویداد</span></div><div class="onboarding-symbol"><div class="onboarding-symbol-mark">−</div><span data-i18n="symNote">یادداشت</span></div><div class="onboarding-symbol"><div class="onboarding-symbol-mark">!</div><span data-i18n="symPriority">مهم</span></div></div></div><label class="checkbox-label" id="readCheckboxLabel" onclick="toggleReadCheckbox()"><input type="checkbox" id="readCheckbox"><div class="checkbox-custom"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><span class="checkbox-text" data-i18n="readConfirm">خواندم و متوجه شدم</span></label><button class="start-btn" id="startBtn" disabled onclick="finishOnboarding()"><span data-i18n="startUsing">شروع استفاده</span><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button></div></div>
+
+<!-- AUTH -->
+<div class="auth-screen" id="authScreen">
+<button class="auth-lang" onclick="toggleLang()" id="authLangBtn">EN</button>
+<div class="auth-logo"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+<div class="auth-title" data-i18n="authTitle">بولت ژورنال</div>
+<div class="auth-subtitle" data-i18n="authSubtitle">دفتر برنامه‌ریزی هوشمند شما</div>
+<div class="auth-card">
+<div class="auth-tabs">
+<button class="auth-tab active" onclick="switchAuthTab('login')" data-i18n="loginTab">ورود</button>
+<button class="auth-tab" onclick="switchAuthTab('register')" data-i18n="registerTab">ثبت‌نام</button>
+</div>
+<div class="auth-error" id="authError"></div>
+<div class="auth-success" id="authSuccess"></div>
+<form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
+<div class="form-group"><label class="form-label" data-i18n="loginIdentifier">ایمیل، شماره یا نام کاربری</label><input type="text" class="form-input" id="loginIdentifier" data-placeholder-i18n="loginIdentifierPh" placeholder="example@mail.com" required autocomplete="username"></div>
+<div class="form-group"><label class="form-label" data-i18n="password">رمز عبور</label><input type="password" class="form-input" id="loginPassword" data-placeholder-i18n="passwordPh" placeholder="رمز عبور" required autocomplete="current-password"></div>
+<div class="lock-attempts" id="loginAttempts"></div>
+<div class="lock-timer" id="loginTimer"></div>
+<button type="submit" class="auth-btn" id="loginBtn" data-i18n="loginBtn">ورود به حساب</button>
+</form>
+<form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+<div class="form-group"><label class="form-label" data-i18n="displayName">نام نمایشی <span class="required">*</span></label><input type="text" class="form-input" id="regDisplayName" placeholder="مثلاً: علی" required></div>
+<div class="form-group"><label class="form-label" data-i18n="username">نام کاربری <span class="required">*</span></label><input type="text" class="form-input" id="regUsername" placeholder="حروف انگلیسی و اعداد" dir="ltr" style="text-align:left" required autocomplete="username"><div class="form-hint" data-i18n="usernameHint">نام کاربری منحصر به فرد شما</div></div>
+<div class="form-group"><label class="form-label" data-i18n="email">ایمیل <span class="optional" data-i18n="optionalOne">(یکی الزامی)</span></label><input type="email" class="form-input" id="regEmail" placeholder="example@mail.com" dir="ltr" style="text-align:left" autocomplete="email"></div>
+<div class="form-group"><label class="form-label" data-i18n="phone">شماره موبایل <span class="optional" data-i18n="optionalOne">(یکی الزامی)</span></label><input type="tel" class="form-input" id="regPhone" placeholder="09123456789" dir="ltr" style="text-align:left" autocomplete="tel"><div class="form-hint warning" data-i18n="emailOrPhoneHint">حداقل یکی از ایمیل یا شماره الزامی است</div></div>
+<div class="form-group"><label class="form-label" data-i18n="password">رمز عبور <span class="required">*</span></label><input type="password" class="form-input" id="regPassword" placeholder="حداقل ۶ کاراکتر" required minlength="6" autocomplete="new-password" oninput="checkPwStrength(this.value)"><div class="pw-strength" id="pwStrength"><div class="pw-strength-bar"><div class="pw-strength-fill"></div></div><div class="pw-strength-text"></div></div></div>
+<div class="form-group"><label class="form-label" data-i18n="confirmPassword">تکرار رمز <span class="required">*</span></label><input type="password" class="form-input" id="regConfirm" placeholder="تکرار رمز عبور" required autocomplete="new-password"></div>
+<button type="submit" class="auth-btn" data-i18n="registerBtn">ایجاد حساب</button>
+</form>
+</div>
+<div class="auth-footer" data-i18n="authFooter">داده‌ها رمزنگاری شده و محلی ذخیره می‌شوند</div>
+</div>
+
+<!-- APP -->
+<div class="app-screen" id="appScreen"><div class="header"><div class="header-top"><h1 id="headerTitle">بولت ژورنال</h1><div class="header-right"><div class="user-badge" onclick="showPage('settings',document.querySelectorAll('.nav-item')[6])"><div class="user-avatar-small" id="userAvatarSmall"></div><span id="userDisplayName"></span></div><button class="header-btn" onclick="openSearch()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button><button class="header-btn" onclick="toggleLang()" id="langBtn">EN</button><button class="header-btn" onclick="handleLogout()"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button></div></div><div class="header-date" id="headerDate"></div></div>
+
+<div class="page active" id="page-daily"><div class="container"><div class="stats-grid"><div class="stat-card"><div class="stat-number" id="statTasks">0</div><div class="stat-label" data-i18n="tasksToday">وظایف امروز</div></div><div class="stat-card"><div class="stat-number" id="statCompleted">0</div><div class="stat-label" data-i18n="completed">انجام شده</div></div></div><div id="weeklyChart"></div><div class="section"><div class="section-header"><div class="section-icon"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><div class="section-title" data-i18n="dailyLog">ثبت روزانه</div></div><div id="dailyList"></div><div class="symbol-picker"><button class="symbol-btn active" data-symbol="•" data-type="task"><span class="sym">•</span><span data-i18n="task">وظیفه</span></button><button class="symbol-btn" data-symbol="O" data-type="event"><span class="sym">O</span><span data-i18n="event">رویداد</span></button><button class="symbol-btn" data-symbol="−" data-type="note"><span class="sym">−</span><span data-i18n="note">یادداشت</span></button><button class="symbol-btn" data-symbol="!" data-type="priority"><span class="sym">!</span><span data-i18n="priority">مهم</span></button><button class="symbol-btn" data-symbol="*" data-type="inspiration"><span class="sym">*</span><span data-i18n="inspiration">الهام</span></button></div><div class="add-form"><input type="text" id="dailyInput" data-placeholder-i18n="addEntry" placeholder="چیزی اضافه کن..."><button onclick="addDailyItem()" data-i18n="add">افزودن</button></div></div></div></div>
+
+<div class="page" id="page-future"><div class="container"><div class="section"><div class="section-header"><div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="section-title" data-i18n="futureLog">برنامه آینده</div></div><p style="font-size:12px;color:var(--text-muted);margin-bottom:14px" data-i18n="futureDesc">رویدادها و وظایف ۶ ماه آینده</p><div id="futureList"></div><div class="add-form" style="flex-direction:column;gap:8px"><input type="text" id="futureTitleInput" placeholder="عنوان رویداد..."><select id="futureMonthSelect" style="padding:11px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;background:var(--surface)"></select><button onclick="addFutureItem()" data-i18n="add">افزودن</button></div></div></div></div>
+
+<div class="page" id="page-habits"><div class="container"><div class="section"><div class="section-header"><div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="section-title" data-i18n="habitTracker">ردیاب عادت</div></div><div id="habitsList"></div><div class="add-form"><input type="text" id="habitInput" data-placeholder-i18n="newHabit" placeholder="عادت جدید..."><button onclick="addHabit()" data-i18n="add">افزودن</button></div></div></div></div>
+
+<div class="page" id="page-goals"><div class="container"><div id="goalsChart"></div><div id="goalsList"></div><button class="symbol-btn" style="width:100%;justify-content:center;padding:14px;margin-top:10px" onclick="openGoalModal()"><span class="sym">+</span><span data-i18n="newGoal">هدف جدید</span></button></div></div>
+
+<div class="page" id="page-collections"><div class="container"><div class="section"><div class="section-header"><div class="section-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="section-title" data-i18n="collections">مجموعه‌ها</div></div><div id="collectionsList"></div><button class="symbol-btn" style="width:100%;justify-content:center;padding:12px;margin-top:10px" onclick="openCollectionModal()"><span class="sym">+</span><span data-i18n="newCollection">مجموعه جدید</span></button></div></div></div>
+
+<div class="page" id="page-guide"><div class="container"><div class="section"><div class="section-header"><div class="section-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="section-title" data-i18n="guide">راهنمای بولت ژورنال</div></div><div class="guide-section"><h3 data-i18n="whatIsBujo">بولت ژورنال چیست؟</h3><p data-i18n="whatIsBujoText">بولت ژورنال (BuJo) یک سیستم سازمان‌دهی شخصی است که توسط رایدر کارول طراحی شده.</p></div><div class="guide-section"><h3 data-i18n="coreModules">ماژول‌های اصلی</h3><p><strong data-i18n="index">ایندکس:</strong> <span data-i18n="indexDesc">فهرست مطالب - خودکار مدیریت می‌شه.</span></p><p><strong data-i18n="futureLogM">برنامه آینده:</strong> <span data-i18n="futureLogDesc">رویدادها و وظایف ماه‌های آینده.</span></p><p><strong data-i18n="dailyLogM">ثبت روزانه:</strong> <span data-i18n="dailyLogDesc">ثبت روزانه وظایف و ایده‌ها.</span></p><p><strong data-i18n="collectionsM">مجموعه‌ها:</strong> <span data-i18n="collectionsDesc">لیست‌های موضوعی.</span></p></div><div class="guide-section"><h3 data-i18n="rapidLogging">ثبت سریع</h3><p data-i18n="rapidLoggingText">نمادهای ساده برای دسته‌بندی:</p><div class="symbol-list"><div class="symbol-list-item"><div class="sym-box">•</div><span>وظیفه</span></div><div class="symbol-list-item"><div class="sym-box">×</div><span>انجام شد</span></div><div class="symbol-list-item"><div class="sym-box">›</div><span>منتقل شد</span></div><div class="symbol-list-item"><div class="sym-box">O</div><span>رویداد</span></div><div class="symbol-list-item"><div class="sym-box">−</div><span>یادداشت</span></div><div class="symbol-list-item"><div class="sym-box">!</div><span>مهم</span></div></div></div><div class="guide-section"><h3 data-i18n="tips">نکات طلایی</h3><p data-i18n="tip1">• هر روز چند دقیقه وقت بذار</p><p data-i18n="tip2">• کوتاه و مختصر بنویس</p><p data-i18n="tip3">• صادق باش</p><p data-i18n="tip5">• کمال‌گرا نباش</p></div></div></div></div>
+
+<div class="page" id="page-settings"><div class="container">
+<div class="section"><div class="settings-profile"><div class="avatar-container"><div class="avatar-large" id="avatarLarge"></div><button class="avatar-edit-btn" onclick="openAvatarModal()"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button></div><div class="profile-name" id="profileName"></div><div class="profile-username" id="profileUsername"></div></div><div class="account-stats" id="accountStats"></div></div>
+
+<!-- Security Status -->
+<div class="security-status-card" id="securityStatusCard"></div>
+
+<div class="settings-group"><div class="settings-group-title" data-i18n="security">امنیت</div><div class="settings-list">
+<button class="settings-item" onclick="openPinSetupModal()"><div class="settings-item-icon success"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="settings-item-content"><div class="settings-item-title" data-i18n="setupPin">تنظیم PIN Code</div><div class="settings-item-desc" data-i18n="setupPinDesc">لایه دوم امنیتی برای ورود</div></div><div class="settings-item-arrow"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div></button>
+<button class="settings-item" onclick="openSecuritySettingsModal()"><div class="settings-item-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="settings-item-content"><div class="settings-item-title" data-i18n="securitySettings">تنظیمات امنیتی</div><div class="settings-item-desc" data-i18n="securitySettingsDesc">زمان قفل خودکار و...</div></div><div class="settings-item-arrow"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div></button>
+<button class="settings-item" onclick="manualLock()"><div class="settings-item-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="settings-item-content"><div class="settings-item-title" data-i18n="lockNow">قفل کردن اکنون</div><div class="settings-item-desc" data-i18n="lockNowDesc">بلافاصله قفل شود</div></div></button>
+</div></div>
+
+<div class="settings-group"><div class="settings-group-title" data-i18n="appearance">ظاهر</div><div class="settings-list">
+<button class="settings-item" onclick="openThemeModal()"><div class="settings-item-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/></svg></div><div class="settings-item-content"><div class="settings-item-title" data-i18n="theme">تم رنگی</div><div class="settings-item-desc" id="currentThemeName"></div></div><div class="settings-item-arrow"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div></button>
+<button class="settings-item" onclick="toggleLang()"><div class="settings-item-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div><div class="settings-item-content"><div class="settings-item-title" data-i18n="language">زبان</div><div class="settings-item-desc" id="currentLangName"></div></div><div class="settings-item-arrow"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div></button>
+<button class="settings-item" onclick="showOnboarding()"><div class="settings-item-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="settings-item-content"><div class="settings-item-title" data-i18n="showTutorial">نمایش آموزش</div></div><div class="settings-item-arrow"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div></button>
+</div></div>
+
+<div class="settings-group"><div class="settings-group-title" data-i18n="account">حساب</div><div class="settings-list">
+<button class="settings-item" onclick="openEditProfileModal()"><div class="settings-item-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="settings-item-content"><div class="settings-item-title" data-i18n="editProfile">ویرایش پروفایل</div></div><div class="settings-item-arrow"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div></button>
+<button class="settings-item" onclick="openChangePasswordModal()"><div class="settings-item-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="settings-item-content"><div class="settings-item-title" data-i18n="changePassword">تغییر رمز</div></div><div class="settings-item-arrow"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div></button>
+</div></div>
+
+<div class="settings-group"><div class="settings-group-title" data-i18n="dataManagement">داده‌ها</div><div class="settings-list">
+<button class="settings-item" onclick="exportData()"><div class="settings-item-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="settings-item-content"><div class="settings-item-title" data-i18n="exportData">پشتیبان‌گیری رمزنگاری</div><div class="settings-item-desc" data-i18n="exportDataDesc">دانلود فایل رمزنگاری شده</div></div><div class="settings-item-arrow"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div></button>
+<button class="settings-item" onclick="document.getElementById('importFile').click()"><div class="settings-item-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><div class="settings-item-content"><div class="settings-item-title" data-i18n="importData">بازیابی</div></div><div class="settings-item-arrow"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div></button>
+<input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+<button class="settings-item" onclick="clearAllData()"><div class="settings-item-icon danger"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div><div class="settings-item-content"><div class="settings-item-title danger" data-i18n="clearData">پاک کردن داده‌ها</div></div><div class="settings-item-arrow"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div></button>
+</div></div>
+
+<div class="settings-group"><div class="settings-list">
+<button class="settings-item" onclick="handleLogout()"><div class="settings-item-icon"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div><div class="settings-item-content"><div class="settings-item-title" data-i18n="logout">خروج و پاک کردن کلید</div></div></button>
+<button class="settings-item" onclick="deleteAccount()"><div class="settings-item-icon danger"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></div><div class="settings-item-content"><div class="settings-item-title danger" data-i18n="deleteAccount">حذف حساب</div></div></button>
+</div></div>
+<div style="text-align:center;padding:20px 0;font-size:11px;color:var(--text-muted)"><span data-i18n="version">نسخه</span> 4.0.0 Secure</div>
+</div></div>
+
+<div class="bottom-nav">
+<button class="nav-item active" onclick="showPage('daily',this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span><span data-i18n="navDaily">روزانه</span></button>
+<button class="nav-item" onclick="showPage('future',this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg></span><span data-i18n="navFuture">آینده</span></button>
+<button class="nav-item" onclick="showPage('habits',this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span><span data-i18n="navHabits">عادت</span></button>
+<button class="nav-item" onclick="showPage('goals',this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span><span data-i18n="navGoals">اهداف</span></button>
+<button class="nav-item" onclick="showPage('collections',this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span data-i18n="navCollections">مجموعه</span></button>
+<button class="nav-item" onclick="showPage('guide',this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span data-i18n="navGuide">راهنما</span></button>
+<button class="nav-item" onclick="showPage('settings',this)"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span data-i18n="navSettings">تنظیمات</span></button>
+</div>
+</div>
+
+<div class="search-overlay" id="searchOverlay" onclick="closeSearch()"></div>
+<div class="search-panel" id="searchPanel"><div class="search-input-row"><input type="text" class="search-input" id="searchInput" data-placeholder-i18n="searchPlaceholder" placeholder="جستجو..." oninput="performSearch()"><button class="search-close" onclick="closeSearch()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><div class="search-filters" id="searchFilters"><button class="search-filter active" data-filter="all" onclick="setSearchFilter('all',this)" data-i18n="filterAll">همه</button><button class="search-filter" data-filter="task" onclick="setSearchFilter('task',this)" data-i18n="filterTasks">وظایف</button><button class="search-filter" data-filter="event" onclick="setSearchFilter('event',this)" data-i18n="filterEvents">رویدادها</button><button class="search-filter" data-filter="note" onclick="setSearchFilter('note',this)" data-i18n="filterNotes">یادداشت</button><button class="search-filter" data-filter="collection" onclick="setSearchFilter('collection',this)" data-i18n="filterCollections">مجموعه</button><button class="search-filter" data-filter="goal" onclick="setSearchFilter('goal',this)" data-i18n="filterGoals">اهداف</button></div><div class="search-results" id="searchResults"></div></div>
+
+<div class="modal" id="genericModal"><div class="modal-content" id="genericModalContent"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ SECURITY CONSTANTS ============
+const SEC = {
+  PBKDF2_ITERATIONS: 100000,
+  SALT_LENGTH: 16,
+  IV_LENGTH: 12,
+  AUTO_LOCK_DEFAULT: 5 * 60 * 1000, // 5 min
+  SESSION_TIMEOUT: 30 * 60 * 1000, // 30 min
+  MAX_LOGIN_ATTEMPTS: 5,
+  LOCKOUT_DURATION: 30 * 1000, // 30 sec
+  MIN_PASSWORD_LENGTH: 6
+};
+
+// ============ IN-MEMORY KEYS (never stored) ============
+let cryptoKey = null;       // AES-GCM key for data encryption
+let sessionExpiry = null;   // timestamp
+let lastActivity = null;    // timestamp
+let autoLockTimer = null;
+let sessionTimer = null;
+function loadLockAttempts(){
+  try { return JSON.parse(localStorage.getItem('bujo_lockattempts')) || { count: 0, lockedUntil: 0 }; }
+  catch(e){ return { count: 0, lockedUntil: 0 }; }
+}
+function saveLockAttempts(){
+  localStorage.setItem('bujo_lockattempts', JSON.stringify(lockAttempts));
+}
+let lockAttempts = loadLockAttempts();
+let pinAttempts = { count: 0, lockedUntil: 0 };
+let currentPinBuffer = '';
+
+// ============ TRANSLATIONS ============
+const T={fa:{authTitle:'بولت ژورنال',authSubtitle:'دفتر برنامه‌ریزی هوشمند شما',loginTab:'ورود',registerTab:'ثبت‌نام',loginIdentifier:'ایمیل، شماره یا نام کاربری',loginIdentifierPh:'example@mail.com',username:'نام کاربری',password:'رمز عبور',passwordPh:'رمز عبور',confirmPassword:'تکرار رمز',displayName:'نام نمایشی',loginBtn:'ورود',registerBtn:'ایجاد حساب',authFooter:'داده‌ها رمزنگاری شده و محلی ذخیره می‌شوند',errWrongCredentials:'اطلاعات اشتباه',errUserExists:'نام کاربری تکراری',errEmailExists:'ایمیل تکراری',errPhoneExists:'شماره تکراری',errPasswordMismatch:'رمزها یکسان نیستند',errUsernameFormat:'فقط حروف انگلیسی و اعداد',errMinPassword:'حداقل ۶ کاراکتر',errWrongCurrentPassword:'رمز فعلی اشتباه',errInvalidEmail:'فرمت ایمیل نامعتبر',errInvalidPhone:'فرمت شماره نامعتبر',errNeedEmailOrPhone:'حداقل ایمیل یا شماره الزامی',successRegistered:'ثبت‌نام موفق!',appTitle:'بولت ژورنال',logout:'خروج',tasksToday:'وظایف امروز',completed:'انجام شده',dailyLog:'ثبت روزانه',task:'وظیفه',event:'رویداد',note:'یادداشت',priority:'مهم',inspiration:'الهام',addEntry:'چیزی اضافه کن...',add:'افزودن',futureLog:'برنامه آینده',futureDesc:'رویدادها و وظایف ۶ ماه آینده',habitTracker:'ردیاب عادت',newHabit:'عادت جدید...',collections:'مجموعه‌ها',newCollection:'مجموعه جدید',guide:'راهنما',navDaily:'روزانه',navFuture:'آینده',navHabits:'عادت',navGoals:'اهداف',navCollections:'مجموعه',navGuide:'راهنما',navSettings:'تنظیمات',cancel:'انصراف',save:'ذخیره',delete:'حذف',noItems:'هنوز چیزی ثبت نشده',items:'آیتم',months:['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'],appearance:'ظاهر',theme:'تم رنگی',language:'زبان',account:'حساب',editProfile:'ویرایش پروفایل',changePassword:'تغییر رمز',dataManagement:'داده‌ها',exportData:'پشتیبان‌گیری رمزنگاری',exportDataDesc:'دانلود فایل رمزنگاری شده',importData:'بازیابی',clearData:'پاک کردن',deleteAccount:'حذف حساب',version:'نسخه',chooseAvatar:'انتخاب آواتار',uploadImage:'آپلود تصویر',chooseTheme:'انتخاب تم',themeForest:'سبز جنگلی',themeOcean:'آبی اقیانوس',themeSunset:'غروب',themePlum:'بنفش',themeNight:'شب تیره',editProfileTitle:'ویرایش پروفایل',changePasswordTitle:'تغییر رمز',currentPassword:'رمز فعلی',newPassword:'رمز جدید',confirmNewPassword:'تکرار رمز جدید',confirmClearData:'تمام داده‌ها پاک می‌شوند؟',confirmDeleteAccount:'حساب برای همیشه حذف می‌شود؟',confirmImport:'داده‌ها جایگزین می‌شوند؟',dataCleared:'داده‌ها پاک شد',accountDeleted:'حساب حذف شد',dataExported:'فایل رمزنگاری دانلود شد',dataImported:'داده‌ها بازیابی شد',invalidFile:'فایل نامعتبر',passwordChanged:'رمز تغییر کرد',profileUpdated:'به‌روز شد',optionalOne:'(یکی الزامی)',usernameHint:'نام کاربری منحصر به فرد',emailOrPhoneHint:'حداقل یکی الزامی',email:'ایمیل',phone:'شماره موبایل',onboardingTitle:'آموزش سریع',onboardingSubtitle:'چند نکته کوتاه',symbolsTitle:'نمادها',symTask:'وظیفه',symDone:'انجام شد',symMigrated:'منتقل',symEvent:'رویداد',symNote:'یادداشت',symPriority:'مهم',readConfirm:'خواندم و متوجه شدم',startUsing:'شروع استفاده',showTutorial:'نمایش آموزش',onbPoint1Title:'ثبت روزانه',onbPoint1Desc:'وظایف و رویدادها را ثبت کن.',onbPoint2Title:'تغییر وضعیت',onbPoint2Desc:'روی نماد کلیک کن.',onbPoint3Title:'ماهانه',onbPoint3Desc:'رویدادهای ماه را ببین.',onbPoint4Title:'عادت‌ها',onbPoint4Desc:'عادت‌ها را پیگیری کن.',onbPoint5Title:'مجموعه‌ها',onbPoint5Desc:'لیست‌های موضوعی بساز.',newGoal:'هدف جدید',goalTitle:'عنوان هدف',goalDesc:'توضیحات',goalProgress:'پیشرفت',goalMilestones:'مراحل (هر خط یکی)',goalColor:'رنگ',goalStart:'تاریخ شروع',goalEnd:'تاریخ پایان',goalsOverview:'نمای کلی اهداف',weeklyProgress:'پیشرفت هفتگی',searchPlaceholder:'جستجو...',filterAll:'همه',filterTasks:'وظایف',filterEvents:'رویدادها',filterNotes:'یادداشت',filterCollections:'مجموعه',filterGoals:'اهداف',noResults:'نتیجه‌ای یافت نشد',whatIsBujo:'بولت ژورنال چیست؟',whatIsBujoText:'سیستم سازمان‌دهی شخصی رایدر کارول.',coreModules:'ماژول‌ها',index:'ایندکس',indexDesc:'فهرست خودکار.',futureLogM:'آینده',futureLogDesc:'رویدادهای آینده.',dailyLogM:'روزانه',dailyLogDesc:'ثبت روزانه.',collectionsM:'مجموعه‌ها',collectionsDesc:'لیست موضوعی.',rapidLogging:'ثبت سریع',rapidLoggingText:'نمادهای ساده:',tips:'نکات',tip1:'• هر روز وقت بذار',tip2:'• مختصر بنویس',tip3:'• صادق باش',tip5:'• کمال‌گرا نباش',security:'امنیت',setupPin:'تنظیم PIN Code',setupPinDesc:'لایه دوم امنیتی',securitySettings:'تنظیمات امنیتی',securitySettingsDesc:'زمان قفل خودکار و...',lockNow:'قفل کردن اکنون',lockNowDesc:'بلافاصله قفل شود',lockScreen:'قفل شده',lockSubtitle:'برای ادامه وارد شوید',unlockBtn:'باز کردن',pinTitle:'PIN Code',pinDesc:'یک کد ۴ رقمی وارد کنید',pinSet:'PIN تنظیم شد',pinRemoved:'PIN حذف شد',enterPin:'PIN را وارد کنید',wrongPin:'PIN اشتباه است',pinExists:'PIN قبلاً تنظیم شده',autoLockTime:'زمان قفل خودکار',autoLock1:'۱ دقیقه',autoLock5:'۵ دقیقه',autoLock15:'۱۵ دقیقه',autoLock30:'۳۰ دقیقه',sessionTimeout:'انقضای نشست',session30:'۳۰ دقیقه',session60:'۱ ساعت',session120:'۲ ساعت',encryptionStatus:'وضعیت رمزنگاری',encryptionOn:'فعال (AES-256)',encryptionOff:'غیرفعال',dataEncrypted:'داده‌ها رمزنگاری شده',attemptsRemaining:'تلاش باقی‌مانده',accountLocked:'حساب قفل شده',lockedFor:'قفل به مدت',seconds:'ثانیه',pwWeak:'ضعیف',pwFair:'متوسط',pwGood:'خوب',pwStrong:'قوی',changePin:'تغییر PIN',removePin:'حذف PIN',enterCurrentPin:'PIN فعلی را وارد کنید',enterNewPin:'PIN جدید (۴ رقم)',pinTooShort:'PIN باید ۴ رقم باشد',securityScore:'امتیاز امنیتی',backupEncrypted:'پشتیبان رمزنگاری می‌شود',migrationNeeded:'داده‌های قدیمی در حال رمزنگاری...',migrationDone:'رمزنگاری کامل شد'},en:{authTitle:'Bullet Journal',authSubtitle:'Your smart planner',loginTab:'Login',registerTab:'Register',loginIdentifier:'Email, phone or username',loginIdentifierPh:'example@mail.com',username:'Username',password:'Password',passwordPh:'Password',confirmPassword:'Confirm',displayName:'Display Name',loginBtn:'Sign In',registerBtn:'Create Account',authFooter:'Data encrypted & stored locally',errWrongCredentials:'Invalid credentials',errUserExists:'Username taken',errEmailExists:'Email taken',errPhoneExists:'Phone taken',errPasswordMismatch:'Passwords mismatch',errUsernameFormat:'Letters and numbers only',errMinPassword:'Min 6 characters',errWrongCurrentPassword:'Wrong password',errInvalidEmail:'Invalid email',errInvalidPhone:'Invalid phone',errNeedEmailOrPhone:'Email or phone required',successRegistered:'Registered!',appTitle:'Bullet Journal',logout:'Logout',tasksToday:"Today's Tasks",completed:'Completed',dailyLog:'Daily Log',task:'Task',event:'Event',note:'Note',priority:'Priority',inspiration:'Inspiration',addEntry:'Add something...',add:'Add',futureLog:'Future Log',futureDesc:'Next 6 months',habitTracker:'Habit Tracker',newHabit:'New habit...',collections:'Collections',newCollection:'New Collection',guide:'Guide',navDaily:'Daily',navFuture:'Future',navHabits:'Habits',navGoals:'Goals',navCollections:'Collections',navGuide:'Guide',navSettings:'Settings',cancel:'Cancel',save:'Save',delete:'Delete',noItems:'Nothing yet',items:'items',months:['January','February','March','April','May','June','July','August','September','October','November','December'],appearance:'Appearance',theme:'Theme',language:'Language',account:'Account',editProfile:'Edit Profile',changePassword:'Change Password',dataManagement:'Data',exportData:'Encrypted Backup',exportDataDesc:'Download encrypted file',importData:'Restore',clearData:'Clear Data',deleteAccount:'Delete Account',version:'Version',chooseAvatar:'Choose Avatar',uploadImage:'Upload Image',chooseTheme:'Choose Theme',themeForest:'Forest',themeOcean:'Ocean',themeSunset:'Sunset',themePlum:'Plum',themeNight:'Dark',editProfileTitle:'Edit Profile',changePasswordTitle:'Change Password',currentPassword:'Current',newPassword:'New',confirmNewPassword:'Confirm',confirmClearData:'Delete all data?',confirmDeleteAccount:'Delete account?',confirmImport:'Replace data?',dataCleared:'Cleared',accountDeleted:'Deleted',dataExported:'Encrypted file downloaded',dataImported:'Restored',invalidFile:'Invalid',passwordChanged:'Changed',profileUpdated:'Updated',optionalOne:'(one required)',usernameHint:'Unique username',emailOrPhoneHint:'At least one required',email:'Email',phone:'Phone',onboardingTitle:'Quick Tutorial',onboardingSubtitle:'Quick tips',symbolsTitle:'Symbols',symTask:'Task',symDone:'Done',symMigrated:'Migrated',symEvent:'Event',symNote:'Note',symPriority:'Priority',readConfirm:'I have read and understood',startUsing:'Start',showTutorial:'Tutorial',onbPoint1Title:'Daily',onbPoint1Desc:'Record tasks and events.',onbPoint2Title:'Status',onbPoint2Desc:'Tap symbols to change.',onbPoint3Title:'Monthly',onbPoint3Desc:'View monthly events.',onbPoint4Title:'Habits',onbPoint4Desc:'Track habits.',onbPoint5Title:'Collections',onbPoint5Desc:'Themed lists.',newGoal:'New Goal',goalTitle:'Goal title',goalDesc:'Description',goalProgress:'Progress',goalMilestones:'Milestones (one per line)',goalColor:'Color',goalStart:'Start date',goalEnd:'End date',goalsOverview:'Goals Overview',weeklyProgress:'Weekly Progress',searchPlaceholder:'Search...',filterAll:'All',filterTasks:'Tasks',filterEvents:'Events',filterNotes:'Notes',filterCollections:'Collections',filterGoals:'Goals',noResults:'No results',whatIsBujo:'What is BuJo?',whatIsBujoText:'Personal organization by Ryder Carroll.',coreModules:'Modules',index:'Index',indexDesc:'Auto-managed.',futureLogM:'Future',futureLogDesc:'Upcoming events.',dailyLogM:'Daily',dailyLogDesc:'Daily log.',collectionsM:'Collections',collectionsDesc:'Themed lists.',rapidLogging:'Rapid Logging',rapidLoggingText:'Simple symbols:',tips:'Tips',tip1:'• Daily minutes',tip2:'• Be concise',tip3:'• Be honest',tip5:"• Don't be perfect",security:'Security',setupPin:'Setup PIN Code',setupPinDesc:'Second security layer',securitySettings:'Security Settings',securitySettingsDesc:'Auto-lock time & more',lockNow:'Lock Now',lockNowDesc:'Lock immediately',lockScreen:'Locked',lockSubtitle:'Enter to continue',unlockBtn:'Unlock',pinTitle:'PIN Code',pinDesc:'Enter a 4-digit code',pinSet:'PIN set',pinRemoved:'PIN removed',enterPin:'Enter PIN',wrongPin:'Wrong PIN',pinExists:'PIN already set',autoLockTime:'Auto-lock time',autoLock1:'1 minute',autoLock5:'5 minutes',autoLock15:'15 minutes',autoLock30:'30 minutes',sessionTimeout:'Session timeout',session30:'30 minutes',session60:'1 hour',session120:'2 hours',encryptionStatus:'Encryption status',encryptionOn:'Active (AES-256)',encryptionOff:'Inactive',dataEncrypted:'Data encrypted',attemptsRemaining:'Attempts remaining',accountLocked:'Account locked',lockedFor:'Locked for',seconds:'seconds',pwWeak:'Weak',pwFair:'Fair',pwGood:'Good',pwStrong:'Strong',changePin:'Change PIN',removePin:'Remove PIN',enterCurrentPin:'Enter current PIN',enterNewPin:'New PIN (4 digits)',pinTooShort:'PIN must be 4 digits',securityScore:'Security score',backupEncrypted:'Backup is encrypted',migrationNeeded:'Encrypting old data...',migrationDone:'Encryption complete'}};
+
+const themes={forest:{name:{fa:'سبز جنگلی',en:'Forest'},vars:{'--accent':'#2d4a3e','--accent-light':'#3d6354','--accent-bg':'#e8efe9'}},ocean:{name:{fa:'آبی اقیانوس',en:'Ocean'},vars:{'--accent':'#1e4d6b','--accent-light':'#2a6890','--accent-bg':'#e3edf5'}},sunset:{name:{fa:'غروب',en:'Sunset'},vars:{'--accent':'#b85c38','--accent-light':'#d4714a','--accent-bg':'#f5e6dc'}},plum:{name:{fa:'بنفش',en:'Plum'},vars:{'--accent':'#6b4e71','--accent-light':'#8a6691','--accent-bg':'#ede4ef'}},night:{name:{fa:'شب تیره',en:'Dark'},vars:{'--bg':'#1a1a1a','--surface':'#252525','--surface-alt':'#2d2d2d','--text':'#e8e8e8','--text-secondary':'#a8a8a8','--text-muted':'#707070','--border':'#3a3a3a','--border-light':'#2f2f2f','--accent':'#8ba88f','--accent-light':'#a3bda6','--accent-bg':'#2d3a2e'}}};
+const avatars=[{bg:'#2d4a3e',p:'circle'},{bg:'#b85c38',p:'triangle'},{bg:'#6b4e71',p:'square'},{bg:'#1e4d6b',p:'diamond'},{bg:'#c54545',p:'star'},{bg:'#b8860b',p:'hex'},{bg:'#2d7a4f',p:'wave'},{bg:'#7a4e2d',p:'cross'}];
+const goalColors=['#2d4a3e','#1e4d6b','#b85c38','#6b4e71','#c54545','#b8860b','#2d7a4f','#7a4e2d'];
+
+function avSVG(p,bg,s=88){const ps={circle:`<circle cx="${s/2}" cy="${s/2}" r="${s*.25}" fill="white" opacity=".9"/>`,triangle:`<polygon points="${s/2},${s*.2} ${s*.8},${s*.75} ${s*.2},${s*.75}" fill="white" opacity=".9"/>`,square:`<rect x="${s*.25}" y="${s*.25}" width="${s*.5}" height="${s*.5}" fill="white" opacity=".9" rx="4"/>`,diamond:`<polygon points="${s/2},${s*.15} ${s*.85},${s/2} ${s/2},${s*.85} ${s*.15},${s/2}" fill="white" opacity=".9"/>`,star:`<polygon points="${s/2},${s*.15} ${s*.6},${s*.4} ${s*.85},${s*.4} ${s*.65},${s*.6} ${s*.75},${s*.85} ${s/2},${s*.7} ${s*.25},${s*.85} ${s*.35},${s*.6} ${s*.15},${s*.4} ${s*.4},${s*.4}" fill="white" opacity=".9"/>`,hex:`<polygon points="${s*.5},${s*.15} ${s*.8},${s*.32} ${s*.8},${s*.68} ${s*.5},${s*.85} ${s*.2},${s*.68} ${s*.2},${s*.32}" fill="white" opacity=".9"/>`,wave:`<path d="M${s*.1},${s/2}Q${s*.3},${s*.3} ${s/2},${s/2}T${s*.9},${s/2}" stroke="white" stroke-width="${s*.08}" fill="none" opacity=".9"/>`,cross:`<path d="M${s/2},${s*.2}L${s/2},${s*.8}M${s*.2},${s/2}L${s*.8},${s/2}" stroke="white" stroke-width="${s*.12}" stroke-linecap="round" opacity=".9"/>`};return`<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}"><rect width="${s}" height="${s}" fill="${bg}"/>${ps[p]||ps.circle}</svg>`}
+
+let lang=localStorage.getItem('bujo_lang')||'fa',cu=null,ss='•',st='task',data={},us={},searchFilter='all';
+
+// ============ CRYPTO FUNCTIONS ============
+function getRandomBytes(n){const a=new Uint8Array(n);crypto.getRandomValues(a);return a}
+function bufToB64(buf){return btoa(String.fromCharCode(...new Uint8Array(buf)))}
+function b64ToBuf(b64){return Uint8Array.from(atob(b64),c=>c.charCodeAt(0))}
+
+async function deriveCryptoKey(password, salt, extractable=true){
+  const enc = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    {name:'PBKDF2', salt: salt, iterations: SEC.PBKDF2_ITERATIONS, hash:'SHA-256'},
+    keyMaterial,
+    {name:'AES-GCM', length: 256},
+    extractable,
+    ['encrypt','decrypt']
+  );
+}
+
+// Wrap/unwrap the real data-encryption key using a PIN-derived key, so PIN
+// unlock can recover the SAME key that was derived from the password —
+// instead of deriving an unrelated key from the PIN (which silently produced
+// wrong decryptions and caused real data to be overwritten with empty data).
+async function wrapCryptoKeyWithPin(rawCryptoKey, pin, pinSaltBytes){
+  const pinKey = await deriveCryptoKey(pin, pinSaltBytes, false);
+  const iv = getRandomBytes(SEC.IV_LENGTH);
+  const rawKeyBytes = await crypto.subtle.exportKey('raw', rawCryptoKey);
+  const ciphertext = await crypto.subtle.encrypt({name:'AES-GCM', iv: iv}, pinKey, rawKeyBytes);
+  return { iv: bufToB64(iv), data: bufToB64(ciphertext) };
+}
+
+async function unwrapCryptoKeyWithPin(wrapped, pin, pinSaltBytes){
+  try {
+    const pinKey = await deriveCryptoKey(pin, pinSaltBytes, false);
+    const iv = b64ToBuf(wrapped.iv);
+    const ciphertext = b64ToBuf(wrapped.data);
+    const rawKeyBytes = await crypto.subtle.decrypt({name:'AES-GCM', iv: iv}, pinKey, ciphertext);
+    return await crypto.subtle.importKey('raw', rawKeyBytes, {name:'AES-GCM'}, true, ['encrypt','decrypt']);
+  } catch(e) {
+    console.error('PIN key unwrap failed:', e);
+    return null;
+  }
+}
+
+async function encryptData(obj, key){
+  const enc = new TextEncoder();
+  const iv = getRandomBytes(SEC.IV_LENGTH);
+  const plaintext = enc.encode(JSON.stringify(obj));
+  const ciphertext = await crypto.subtle.encrypt({name:'AES-GCM', iv: iv}, key, plaintext);
+  return { iv: bufToB64(iv), data: bufToB64(ciphertext) };
+}
+
+async function decryptData(encObj, key){
+  try {
+    const iv = b64ToBuf(encObj.iv);
+    const ciphertext = b64ToBuf(encObj.data);
+    const decrypted = await crypto.subtle.decrypt({name:'AES-GCM', iv: iv}, key, ciphertext);
+    const dec = new TextDecoder();
+    return JSON.parse(dec.decode(decrypted));
+  } catch(e) {
+    console.error('Decrypt failed:', e);
+    return null;
+  }
+}
+
+async function hashPassword(password, salt){
+  const enc = new TextEncoder();
+  const data = enc.encode(password + (salt || 'bujo_salt_2024'));
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function hashPIN(pin, salt){
+  const enc = new TextEncoder();
+  const data = enc.encode(pin + 'pin_' + salt);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ============ PASSWORD STRENGTH ============
+function checkPwStrength(pw){
+  const el = document.getElementById('pwStrength');
+  if(!el) return;
+  let score = 0;
+  if(pw.length >= 6) score++;
+  if(pw.length >= 10) score++;
+  if(/[A-Z]/.test(pw) && /[a-z]/.test(pw)) score++;
+  if(/\d/.test(pw)) score++;
+  if(/[^A-Za-z0-9]/.test(pw)) score++;
+  
+  const levels = ['','strength-weak','strength-weak','strength-fair','strength-good','strength-strong'];
+  const texts = {fa:['','ضعیف','ضعیف','متوسط','خوب','قوی'], en:['','Weak','Weak','Fair','Good','Strong']};
+  
+  el.className = 'pw-strength ' + levels[score];
+  el.querySelector('.pw-strength-text').textContent = texts[lang][score];
+}
+
+// ============ RATE LIMITING ============
+function checkLoginLockout(){
+  const now = Date.now();
+  if(lockAttempts.lockedUntil > now){
+    const remaining = Math.ceil((lockAttempts.lockedUntil - now) / 1000);
+    return { locked: true, remaining };
+  }
+  return { locked: false };
+}
+
+function recordFailedLogin(){
+  lockAttempts.count++;
+  if(lockAttempts.count >= SEC.MAX_LOGIN_ATTEMPTS){
+    lockAttempts.lockedUntil = Date.now() + SEC.LOCKOUT_DURATION;
+    lockAttempts.count = 0;
+  }
+  saveLockAttempts();
+  updateLoginAttemptsUI();
+}
+
+function resetLoginAttempts(){
+  lockAttempts = { count: 0, lockedUntil: 0 };
+  saveLockAttempts();
+  updateLoginAttemptsUI();
+}
+
+function updateLoginAttemptsUI(){
+  const attemptsEl = document.getElementById('loginAttempts');
+  const timerEl = document.getElementById('loginTimer');
+  const btn = document.getElementById('loginBtn');
+  const t = T[lang];
+  
+  const lockout = checkLoginLockout();
+  if(lockout.locked){
+    if(attemptsEl) attemptsEl.textContent = `${t.accountLocked}`;
+    if(btn) btn.disabled = true;
+    const tick = () => {
+      const remaining = Math.ceil((lockAttempts.lockedUntil - Date.now()) / 1000);
+      if(remaining <= 0){
+        if(timerEl) timerEl.textContent = '';
+        if(attemptsEl) attemptsEl.textContent = '';
+        if(btn) btn.disabled = false;
+        return;
+      }
+      if(timerEl) timerEl.textContent = `${t.lockedFor} ${remaining} ${t.seconds}`;
+      setTimeout(tick, 1000);
+    };
+    tick();
+  } else {
+    const remaining = SEC.MAX_LOGIN_ATTEMPTS - lockAttempts.count;
+    if(lockAttempts.count > 0 && attemptsEl){
+      attemptsEl.textContent = `${t.attemptsRemaining}: ${remaining}`;
+    } else if(attemptsEl) {
+      attemptsEl.textContent = '';
+    }
+    if(btn) btn.disabled = false;
+    if(timerEl) timerEl.textContent = '';
+  }
+}
+
+// ============ AUTO-LOCK & SESSION ============
+function resetActivity(){
+  lastActivity = Date.now();
+  resetAutoLockTimer();
+}
+
+function resetAutoLockTimer(){
+  if(autoLockTimer) clearTimeout(autoLockTimer);
+  const timeout = us.autoLock || SEC.AUTO_LOCK_DEFAULT;
+  autoLockTimer = setTimeout(() => {
+    if(cu && cryptoKey) showLockScreen();
+  }, timeout);
+}
+
+function resetSessionTimer(){
+  if(sessionTimer) clearTimeout(sessionTimer);
+  const timeout = us.sessionTimeout || SEC.SESSION_TIMEOUT;
+  sessionExpiry = Date.now() + timeout;
+  sessionTimer = setTimeout(() => {
+    if(cu) handleLogout();
+  }, timeout);
+}
+
+function setupActivityTracking(){
+  ['click','keydown','touchstart','scroll'].forEach(ev => {
+    document.addEventListener(ev, () => {
+      if(cu && cryptoKey && !document.getElementById('lockScreen').classList.contains('show')){
+        resetActivity();
+      }
+    }, { passive: true });
+  });
+  document.addEventListener('visibilitychange', () => {
+    if(document.hidden){
+      // App went to background
+    } else {
+      if(cu && sessionExpiry && Date.now() > sessionExpiry){
+        // The session timer itself can be throttled/suspended while the tab
+        // was in the background, so re-check the actual expiry on resume.
+        handleLogout();
+        return;
+      }
+      if(cu && cryptoKey){
+        const timeout = us.autoLock || SEC.AUTO_LOCK_DEFAULT;
+        if(Date.now() - lastActivity > timeout){
+          showLockScreen();
+        } else {
+          resetActivity();
+        }
+      }
+    }
+  });
+}
+
+// ============ LOCK SCREEN ============
+function showLockScreen(){
+  if(autoLockTimer) clearTimeout(autoLockTimer);
+  const lockScreen = document.getElementById('lockScreen');
+  const users = getUsers();
+  const user = users[cu.username];
+  
+  if(user && user.pin){
+    document.getElementById('lockMethodPassword').style.display = 'none';
+    document.getElementById('lockMethodPin').style.display = 'block';
+    renderPinPad();
+  } else {
+    document.getElementById('lockMethodPassword').style.display = 'block';
+    document.getElementById('lockMethodPin').style.display = 'none';
+    document.getElementById('lockPwInput').value = '';
+    document.getElementById('lockPwInput').focus();
+  }
+  
+  // NOTE: pinAttempts is intentionally NOT reset here — resetting it every
+  // time the lock screen appears let anyone bypass the PIN lockout simply by
+  // re-triggering the lock (e.g. switching tabs). It's only cleared on a
+  // correct PIN entry (resetPinAttempts) or once its timer naturally expires.
+  if(pinAttempts.lockedUntil > Date.now()){
+    const attemptsEl = document.getElementById('pinLockAttempts');
+    const timerEl = document.getElementById('pinLockTimer');
+    const tick = () => {
+      const remaining = Math.ceil((pinAttempts.lockedUntil - Date.now()) / 1000);
+      if(remaining <= 0){
+        if(timerEl) timerEl.textContent = '';
+        pinAttempts = { count: 0, lockedUntil: 0 };
+        return;
+      }
+      if(timerEl) timerEl.textContent = `${T[lang].lockedFor} ${remaining} ${T[lang].seconds}`;
+      setTimeout(tick, 1000);
+    };
+    tick();
+  }
+  lockScreen.classList.add('show');
+}
+
+function resetPinAttempts(){
+  pinAttempts = { count: 0, lockedUntil: 0 };
+  const attemptsEl = document.getElementById('pinLockAttempts');
+  const timerEl = document.getElementById('pinLockTimer');
+  if(attemptsEl) attemptsEl.textContent = '';
+  if(timerEl) timerEl.textContent = '';
+}
+
+function hideLockScreen(){
+  document.getElementById('lockScreen').classList.remove('show');
+  resetActivity();
+  resetSessionTimer();
+}
+
+async function unlockWithPassword(){
+  const pw = document.getElementById('lockPwInput').value;
+  const users = getUsers();
+  const user = users[cu.username];
+  const h = await hashPassword(pw, user.salt);
+  
+  if(h === user.password){
+    // Re-derive crypto key
+    cryptoKey = await deriveCryptoKey(pw, b64ToBuf(user.cryptoSalt));
+    // Reload encrypted data
+    await loadEncryptedData();
+    hideLockScreen();
+    renderAll();
+    showToast(T[lang].dataEncrypted);
+  } else {
+    recordFailedLogin();
+    document.getElementById('lockPwInput').value = '';
+    updateLockScreenUI();
+  }
+}
+
+function updateLockScreenUI(){
+  const attemptsEl = document.getElementById('lockAttempts');
+  const t = T[lang];
+  const remaining = SEC.MAX_LOGIN_ATTEMPTS - lockAttempts.count;
+  if(lockAttempts.count > 0){
+    attemptsEl.textContent = `${t.attemptsRemaining}: ${remaining}`;
+  } else {
+    attemptsEl.textContent = '';
+  }
+}
+
+function renderPinPad(){
+  const display = document.getElementById('pinDisplay');
+  const pad = document.getElementById('pinPad');
+  currentPinBuffer = '';
+  
+  display.innerHTML = Array(4).fill(0).map(() => '<div class="pin-dot"></div>').join('');
+  
+  let html = '';
+  for(let i = 1; i <= 9; i++){
+    html += `<button class="pin-key" onclick="pinPress('${i}')">${i}</button>`;
+  }
+  html += `<button class="pin-key empty"></button>`;
+  html += `<button class="pin-key" onclick="pinPress('0')">0</button>`;
+  html += `<button class="pin-key" onclick="pinBack()">⌫</button>`;
+  pad.innerHTML = html;
+}
+
+function pinPress(n){
+  if(pinAttempts.lockedUntil > Date.now()) return;
+  if(currentPinBuffer.length >= 4) return;
+  currentPinBuffer += n;
+  updatePinDisplay();
+  if(currentPinBuffer.length === 4){
+    setTimeout(verifyPin, 200);
+  }
+}
+
+function pinBack(){
+  currentPinBuffer = currentPinBuffer.slice(0, -1);
+  updatePinDisplay();
+}
+
+function updatePinDisplay(){
+  const dots = document.querySelectorAll('#pinDisplay .pin-dot');
+  dots.forEach((d, i) => {
+    d.classList.toggle('filled', i < currentPinBuffer.length);
+  });
+}
+
+async function verifyPin(){
+  if(pinAttempts.lockedUntil > Date.now()){
+    currentPinBuffer = '';
+    updatePinDisplay();
+    return;
+  }
+  const users = getUsers();
+  const user = users[cu.username];
+  const enteredPin = currentPinBuffer;
+  const h = await hashPIN(enteredPin, user.pinSalt);
+  
+  if(h === user.pin){
+    // Recover the SAME key that was derived from the password at login,
+    // by unwrapping the copy that savePin()/changePin() stored for this PIN.
+    const unwrapped = user.pinWrappedKey
+      ? await unwrapCryptoKeyWithPin(user.pinWrappedKey, enteredPin, b64ToBuf(user.pinSalt))
+      : null;
+    if(!unwrapped){
+      // No usable wrapped key (e.g. set up before this fix, or corrupted).
+      // Don't proceed with a wrong key that would overwrite real data —
+      // force the user back to password unlock and ask them to reset the PIN.
+      currentPinBuffer = '';
+      updatePinDisplay();
+      showToast(T[lang].invalidFile);
+      document.getElementById('lockMethodPassword').style.display = 'block';
+      document.getElementById('lockMethodPin').style.display = 'none';
+      document.getElementById('lockPwInput').focus();
+      return;
+    }
+    cryptoKey = unwrapped;
+    resetPinAttempts();
+    await loadEncryptedData();
+    hideLockScreen();
+    renderAll();
+    showToast(T[lang].dataEncrypted);
+  } else {
+    pinAttempts.count++;
+    currentPinBuffer = '';
+    updatePinDisplay();
+    const attemptsEl = document.getElementById('pinLockAttempts');
+    attemptsEl.textContent = T[lang].wrongPin;
+    setTimeout(() => attemptsEl.textContent = '', 2000);
+    
+    if(pinAttempts.count >= 5){
+      pinAttempts.lockedUntil = Date.now() + SEC.LOCKOUT_DURATION;
+      const tick = () => {
+        const remaining = Math.ceil((pinAttempts.lockedUntil - Date.now()) / 1000);
+        const timerEl = document.getElementById('pinLockTimer');
+        if(remaining <= 0){
+          timerEl.textContent = '';
+          pinAttempts = { count: 0, lockedUntil: 0 };
+          return;
+        }
+        timerEl.textContent = `${T[lang].lockedFor} ${remaining} ${T[lang].seconds}`;
+        setTimeout(tick, 1000);
+      };
+      tick();
+    }
+  }
+}
+
+function manualLock(){
+  if(cu && cryptoKey) showLockScreen();
+}
+
+// ============ USER MANAGEMENT ============
+function gU(){return JSON.parse(localStorage.getItem('bujo_users')||'{}')}
+function sU(u){localStorage.setItem('bujo_users',JSON.stringify(u))}
+// Several functions throughout the app call getUsers() (lock screen, PIN
+// setup/change, security settings, password change, avatar) but only gU()
+// was ever defined — every one of those call sites threw a silent
+// "getUsers is not defined" error, which is why their buttons did nothing.
+function getUsers(){return gU()}
+
+function switchAuthTab(t){document.querySelectorAll('.auth-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.auth-form').forEach(x=>x.classList.remove('active'));if(t==='login'){document.querySelectorAll('.auth-tab')[0].classList.add('active');document.getElementById('loginForm').classList.add('active')}else{document.querySelectorAll('.auth-tab')[1].classList.add('active');document.getElementById('registerForm').classList.add('active')}hideMsg();resetLoginAttempts()}
+function showErr(m){const e=document.getElementById('authError');e.textContent=m;e.classList.add('show');document.getElementById('authSuccess').classList.remove('show')}
+function showSuc(m){const e=document.getElementById('authSuccess');e.textContent=m;e.classList.add('show');document.getElementById('authError').classList.remove('show')}
+function hideMsg(){document.getElementById('authError').classList.remove('show');document.getElementById('authSuccess').classList.remove('show')}
+function normPh(p){if(!p)return'';const c=p.replace(/[\s\-\(\)]/g,'');if(c.startsWith('+98'))return c;if(c.startsWith('0'))return'+98'+c.substring(1);if(c.startsWith('9')&&c.length===10)return'+98'+c;return c}
+
+async function handleLogin(e){
+  e.preventDefault();
+  
+  const lockout = checkLoginLockout();
+  if(lockout.locked){
+    updateLoginAttemptsUI();
+    return;
+  }
+  
+  hideMsg();
+  const id=document.getElementById('loginIdentifier').value.trim().toLowerCase();
+  const pw=document.getElementById('loginPassword').value;
+  const t=T[lang];
+  const users=gU();
+  
+  let f=null;
+  for(const[u,user]of Object.entries(users)){
+    if(u===id||(user.email&&user.email===id)||(user.phone&&(user.phone===id||user.phone===normPh(id)))){
+      f={username:u,...user};break;
+    }
+  }
+  
+  if(!f){
+    recordFailedLogin();
+    showErr(t.errWrongCredentials);
+    return;
+  }
+  
+  const h = await hashPassword(pw, f.salt);
+  if(h !== f.password){
+    recordFailedLogin();
+    showErr(t.errWrongCredentials);
+    return;
+  }
+  
+  // Login successful
+  resetLoginAttempts();
+  cu={username:f.username, displayName:f.displayName};
+  localStorage.setItem('bujo_session', JSON.stringify(cu));
+  
+  // Derive crypto key from password
+  cryptoKey = await deriveCryptoKey(pw, b64ToBuf(f.cryptoSalt));
+  sessionExpiry = Date.now() + (us.sessionTimeout || SEC.SESSION_TIMEOUT);
+  lastActivity = Date.now();
+  
+  // Load encrypted data
+  await loadEncryptedData();
+  loadSettings();
+  showApp();
+  resetSessionTimer();
+  resetActivity();
+}
+
+async function handleRegister(e){
+  e.preventDefault();hideMsg();
+  const t=T[lang];
+  const dn=document.getElementById('regDisplayName').value.trim();
+  const un=document.getElementById('regUsername').value.trim().toLowerCase();
+  const em=document.getElementById('regEmail').value.trim().toLowerCase();
+  const ph=document.getElementById('regPhone').value.trim();
+  const pw=document.getElementById('regPassword').value;
+  const cf=document.getElementById('regConfirm').value;
+  
+  if(!/^[a-z0-9_]+$/.test(un)){showErr(t.errUsernameFormat);return}
+  if(pw.length < SEC.MIN_PASSWORD_LENGTH){showErr(t.errMinPassword);return}
+  if(pw!==cf){showErr(t.errPasswordMismatch);return}
+  if(em&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){showErr(t.errInvalidEmail);return}
+  if(ph&&!/^(\+98|0)?9\d{9}$/.test(ph.replace(/[\s\-\(\)]/g,''))&&!/^\+?[1-9]\d{7,14}$/.test(ph.replace(/[\s\-\(\)]/g,''))){showErr(t.errInvalidPhone);return}
+  if(!em&&!ph){showErr(t.errNeedEmailOrPhone);return}
+  
+  const users=gU();
+  if(users[un]){showErr(t.errUserExists);return}
+  if(em)for(const u of Object.values(users))if(u.email===em){showErr(t.errEmailExists);return}
+  if(ph){const np=normPh(ph);for(const u of Object.values(users))if(u.phone===np){showErr(t.errPhoneExists);return}}
+  
+  // Generate salts
+  const pwSaltBytes = getRandomBytes(SEC.SALT_LENGTH);
+  const cryptoSaltBytes = getRandomBytes(SEC.SALT_LENGTH);
+  
+  const hashedPw = await hashPassword(pw, bufToB64(pwSaltBytes));
+  
+  // Create empty encrypted data
+  const emptyData = {daily:{},future:[],habits:[],collections:[],goals:[]};
+  const tempKey = await deriveCryptoKey(pw, cryptoSaltBytes);
+  const encrypted = await encryptData(emptyData, tempKey);
+  
+  users[un]={
+    displayName:dn,
+    password:hashedPw,
+    salt: bufToB64(pwSaltBytes),
+    cryptoSalt: bufToB64(cryptoSaltBytes),
+    createdAt:Date.now(),
+    avatar:{type:'default',index:Math.floor(Math.random()*8)},
+    pin: null,
+    pinSalt: null
+  };
+  if(em)users[un].email=em;
+  if(ph)users[un].phone=normPh(ph);
+  
+  sU(users);
+  
+  // Store encrypted data
+  localStorage.setItem('bujo_encdata_' + un, JSON.stringify(encrypted));
+  localStorage.setItem('bujo_settings_' + un, JSON.stringify({
+    theme:'forest',
+    autoLock: SEC.AUTO_LOCK_DEFAULT,
+    sessionTimeout: SEC.SESSION_TIMEOUT
+  }));
+  
+  showSuc(t.successRegistered);
+  switchAuthTab('login');
+  document.getElementById('loginIdentifier').value=un;
+  document.getElementById('loginPassword').value='';
+  document.getElementById('registerForm').reset();
+}
+
+async function loadEncryptedData(){
+  if(!cu || !cryptoKey) return;
+  const stored = localStorage.getItem('bujo_encdata_' + cu.username);
+  
+  if(!stored){
+    // Check for legacy plaintext data (migration)
+    const legacy = localStorage.getItem('bujo_data_' + cu.username);
+    if(legacy){
+      showToast(T[lang].migrationNeeded);
+      data = JSON.parse(legacy);
+      // Encrypt and migrate
+      await saveData();
+      localStorage.removeItem('bujo_data_' + cu.username);
+      showToast(T[lang].migrationDone);
+    } else {
+      data = {daily:{},future:[],habits:[],collections:[],goals:[]};
+    }
+    return;
+  }
+  
+  try {
+    const encObj = JSON.parse(stored);
+    const decrypted = await decryptData(encObj, cryptoKey);
+    if(decrypted){
+      data = decrypted;
+      ['daily','future','habits','collections','goals'].forEach(k=>{
+        if(!data[k]) data[k]=k==='daily'?{}:[];
+      });
+    } else {
+      data = {daily:{},future:[],habits:[],collections:[],goals:[]};
+    }
+  } catch(e) {
+    console.error('Load error:', e);
+    data = {daily:{},future:[],habits:[],collections:[],goals:[]};
+  }
+}
+
+async function saveData(){
+  if(!cu || !cryptoKey) return;
+  const encrypted = await encryptData(data, cryptoKey);
+  localStorage.setItem('bujo_encdata_' + cu.username, JSON.stringify(encrypted));
+}
+// 18 call sites across the app (addDailyItem, addHabit, addFutureItem,
+// saveGoal, saveCol, etc.) call saveD() — that name was never defined,
+// only saveData() was, so every add/edit crashed right after updating
+// the in-memory data, before it could be persisted or the screen redrawn.
+function saveD(){ return saveData(); }
+
+function loadSettings(){
+  if(!cu)return;
+  us=JSON.parse(localStorage.getItem('bujo_settings_' + cu.username)||'{}');
+  if(!us.theme)us.theme='forest';
+  if(!us.autoLock) us.autoLock = SEC.AUTO_LOCK_DEFAULT;
+  if(!us.sessionTimeout) us.sessionTimeout = SEC.SESSION_TIMEOUT;
+  applyTheme();
+}
+function saveS(){if(cu)localStorage.setItem('bujo_settings_' + cu.username, JSON.stringify(us))}
+function applyTheme(){const t=themes[us.theme]||themes.forest;Object.entries(t.vars).forEach(([k,v])=>document.documentElement.style.setProperty(k,v))}
+
+function showApp(){
+  document.getElementById('authScreen').classList.add('hidden');
+  document.getElementById('appScreen').classList.add('active');
+  updateUser();applyT();
+  renderSecurityStatus();
+}
+
+function handleLogout(){
+  // Clear crypto key from memory
+  cryptoKey = null;
+  sessionExpiry = null;
+  if(autoLockTimer) clearTimeout(autoLockTimer);
+  if(sessionTimer) clearTimeout(sessionTimer);
+  
+  cu=null;
+  data={};
+  localStorage.removeItem('bujo_session');
+  document.getElementById('appScreen').classList.remove('active');
+  document.getElementById('authScreen').classList.remove('hidden');
+  document.getElementById('loginForm').reset();
+  hideMsg();
+  resetLoginAttempts();
+}
+
+function updateUser(){
+  if(!cu)return;
+  document.getElementById('userDisplayName').textContent=cu.displayName;
+  const users=gU(),u=users[cu.username],av=u.avatar||{type:'default',index:0};
+  const sa=document.getElementById('userAvatarSmall'),la=document.getElementById('avatarLarge');
+  if(av.type==='image'&&av.data){sa.innerHTML=`<img src="${av.data}">`;la.innerHTML=`<img src="${av.data}">`}else{const a=avatars[av.index||0];sa.innerHTML=avSVG(a.p,a.bg,20);la.innerHTML=avSVG(a.p,a.bg,88)}
+  document.getElementById('profileName').textContent=cu.displayName;
+  let id='@'+cu.username;
+  if(u.email)id=u.email;else if(u.phone)id=u.phone;
+  document.getElementById('profileUsername').textContent=id;
+  renderStats();
+}
+function renderStats(){const t=T[lang];let tt=0,tc=0;Object.values(data.daily).forEach(items=>items.forEach(i=>{if(i.type==='task'||i.type==='priority'){tt++;if(i.status==='completed')tc++}}));document.getElementById('accountStats').innerHTML=`<div class="account-stat"><div class="account-stat-num">${tt}</div><div class="account-stat-label">${t.task}</div></div><div class="account-stat"><div class="account-stat-num">${tc}</div><div class="account-stat-label">${t.completed}</div></div><div class="account-stat"><div class="account-stat-num">${data.goals?data.goals.length:0}</div><div class="account-stat-label">${t.navGoals}</div></div>`}
+
+function applyT(){
+  document.documentElement.lang=lang;
+  document.documentElement.dir=lang==='fa'?'rtl':'ltr';
+  document.body.classList.toggle('en',lang==='en');
+  const t=T[lang];
+  document.getElementById('headerTitle').textContent=t.appTitle;
+  document.getElementById('langBtn').textContent = lang==='fa'?'EN':'فا';
+  document.getElementById('authLangBtn').textContent = lang==='fa'?'EN':'فا';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(t[k])el.textContent=t[k]});
+  document.querySelectorAll('[data-placeholder-i18n]').forEach(el=>{const k=el.getAttribute('data-placeholder-i18n');if(t[k])el.placeholder=t[k]});
+  updateDate();updateSD();
+  if(cu){renderAll();updateUser();renderSecurityStatus()}
+}
+function updateSD(){if(!cu)return;const t=T[lang],th=themes[us.theme]||themes.forest;document.getElementById('currentThemeName').textContent=th.name[lang];document.getElementById('currentLangName').textContent=lang==='fa'?'فارسی':'English'}
+function toggleLang(){lang=lang==='fa'?'en':'fa';localStorage.setItem('bujo_lang',lang);applyT()}
+function updateDate(){const n=new Date();let d;if(lang==='fa')try{d=n.toLocaleDateString('fa-IR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}catch(e){d=n.toLocaleDateString()}else d=n.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});document.getElementById('headerDate').textContent=d}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+function openModal(h){document.getElementById('genericModalContent').innerHTML=h;document.getElementById('genericModal').classList.add('active')}
+function closeModal(){document.getElementById('genericModal').classList.remove('active')}
+document.getElementById('genericModal').addEventListener('click',e=>{if(e.target.id==='genericModal')closeModal()});
+
+// ============ SECURITY STATUS CARD ============
+function renderSecurityStatus(){
+  if(!cu) return;
+  const t = T[lang];
+  const users = getUsers();
+  const user = users[cu.username];
+  const hasPin = !!user.pin;
+  const score = (cryptoKey ? 40 : 0) + (hasPin ? 30 : 0) + (us.autoLock <= 5*60*1000 ? 15 : 5) + (us.sessionTimeout <= 30*60*1000 ? 15 : 5);
+  
+  const card = document.getElementById('securityStatusCard');
+  card.innerHTML = `
+    <div class="security-status-title">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      ${t.securityScore}: ${score}/100
+    </div>
+    <div class="security-status-row">
+      <span>${t.encryptionStatus}</span>
+      <span class="ok">${t.encryptionOn}</span>
+    </div>
+    <div class="security-status-row">
+      <span>PIN Code</span>
+      <span class="${hasPin?'ok':'warn'}">${hasPin?'✓ '+t.pinSet:'—'}</span>
+    </div>
+    <div class="security-status-row">
+      <span>${t.backupEncrypted}</span>
+      <span class="ok">✓ AES-256</span>
+    </div>
+  `;
+}
+
+// ============ PIN SETUP ============
+function openPinSetupModal(){
+  const t = T[lang];
+  const users = getUsers();
+  const user = users[cu.username];
+  const hasPin = !!user.pin;
+  
+  if(hasPin){
+    openModal(`
+      <h3>${t.setupPin}</h3>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">${t.pinExists}</p>
+      <div class="modal-buttons">
+        <button class="btn-secondary" onclick="closeModal()">${t.cancel}</button>
+        <button class="btn-danger" onclick="removePin()">${t.removePin}</button>
+        <button class="btn-primary" onclick="openChangePinModal()">${t.changePin}</button>
+      </div>
+    `);
+  } else {
+    openModal(`
+      <h3>${t.setupPin}</h3>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">${t.pinDesc}</p>
+      <div class="form-group">
+        <label class="form-label">${t.enterNewPin}</label>
+        <input type="tel" class="form-input" id="newPinInput" maxlength="4" pattern="[0-9]*" inputmode="numeric" dir="ltr" style="text-align:center;font-size:20px;letter-spacing:8px">
+      </div>
+      <div class="modal-buttons">
+        <button class="btn-secondary" onclick="closeModal()">${t.cancel}</button>
+        <button class="btn-primary" onclick="savePin()">${t.save}</button>
+      </div>
+    `);
+  }
+}
+
+async function savePin(){
+  const pin = document.getElementById('newPinInput').value.trim();
+  const t = T[lang];
+  if(!/^\d{4}$/.test(pin)){
+    showToast(t.pinTooShort);
+    return;
+  }
+  if(!cryptoKey){
+    showToast(t.invalidFile);
+    return;
+  }
+  const users = getUsers();
+  const pinSaltBytes = getRandomBytes(SEC.SALT_LENGTH);
+  const hashedPin = await hashPIN(pin, bufToB64(pinSaltBytes));
+  const wrappedKey = await wrapCryptoKeyWithPin(cryptoKey, pin, pinSaltBytes);
+  users[cu.username].pin = hashedPin;
+  users[cu.username].pinSalt = bufToB64(pinSaltBytes);
+  users[cu.username].pinWrappedKey = wrappedKey;
+  sU(users);
+  closeModal();
+  showToast(t.pinSet);
+  renderSecurityStatus();
+}
+
+async function removePin(){
+  const users = getUsers();
+  delete users[cu.username].pin;
+  delete users[cu.username].pinSalt;
+  delete users[cu.username].pinWrappedKey;
+  sU(users);
+  closeModal();
+  showToast(T[lang].pinRemoved);
+  renderSecurityStatus();
+}
+
+function openChangePinModal(){
+  const t = T[lang];
+  openModal(`
+    <h3>${t.changePin}</h3>
+    <div class="form-group"><label class="form-label">${t.enterCurrentPin}</label><input type="tel" class="form-input" id="oldPinInput" maxlength="4" dir="ltr" style="text-align:center;font-size:20px;letter-spacing:8px"></div>
+    <div class="form-group"><label class="form-label">${t.enterNewPin}</label><input type="tel" class="form-input" id="newPinInput2" maxlength="4" dir="ltr" style="text-align:center;font-size:20px;letter-spacing:8px"></div>
+    <div class="modal-buttons">
+      <button class="btn-secondary" onclick="closeModal()">${t.cancel}</button>
+      <button class="btn-primary" onclick="changePin()">${t.save}</button>
+    </div>
+  `);
+}
+
+async function changePin(){
+  const oldPin = document.getElementById('oldPinInput').value.trim();
+  const newPin = document.getElementById('newPinInput2').value.trim();
+  const t = T[lang];
+  const users = getUsers();
+  const user = users[cu.username];
+  
+  const oldHash = await hashPIN(oldPin, user.pinSalt);
+  if(oldHash !== user.pin){
+    showToast(t.wrongPin);
+    return;
+  }
+  if(!/^\d{4}$/.test(newPin)){
+    showToast(t.pinTooShort);
+    return;
+  }
+  
+  if(!cryptoKey){
+    showToast(t.invalidFile);
+    return;
+  }
+  const pinSaltBytes = getRandomBytes(SEC.SALT_LENGTH);
+  const hashedPin = await hashPIN(newPin, bufToB64(pinSaltBytes));
+  const wrappedKey = await wrapCryptoKeyWithPin(cryptoKey, newPin, pinSaltBytes);
+  user.pin = hashedPin;
+  user.pinSalt = bufToB64(pinSaltBytes);
+  user.pinWrappedKey = wrappedKey;
+  sU(users);
+  closeModal();
+  showToast(t.pinSet);
+  renderSecurityStatus();
+}
+
+// ============ SECURITY SETTINGS ============
+function openSecuritySettingsModal(){
+  const t = T[lang];
+  const autoLockOptions = [
+    {v: 60*1000, l: t.autoLock1},
+    {v: 5*60*1000, l: t.autoLock5},
+    {v: 15*60*1000, l: t.autoLock15},
+    {v: 30*60*1000, l: t.autoLock30}
+  ];
+  const sessionOptions = [
+    {v: 30*60*1000, l: t.session30},
+    {v: 60*60*1000, l: t.session60},
+    {v: 120*60*1000, l: t.session120}
+  ];
+  
+  const autoLockHtml = autoLockOptions.map(o => 
+    `<button class="settings-item" style="${us.autoLock===o.v?'background:var(--accent-bg)':''}" onclick="setAutoLock(${o.v})"><div class="settings-item-content"><div class="settings-item-title">${o.l}</div></div>${us.autoLock===o.v?'<div style="color:var(--accent);font-weight:bold">✓</div>':''}</button>`
+  ).join('');
+  
+  const sessionHtml = sessionOptions.map(o => 
+    `<button class="settings-item" style="${us.sessionTimeout===o.v?'background:var(--accent-bg)':''}" onclick="setSessionTimeout(${o.v})"><div class="settings-item-content"><div class="settings-item-title">${o.l}</div></div>${us.sessionTimeout===o.v?'<div style="color:var(--accent);font-weight:bold">✓</div>':''}</button>`
+  ).join('');
+  
+  openModal(`
+    <h3>${t.securitySettings}</h3>
+    <div class="settings-group-title" style="margin-top:12px">${t.autoLockTime}</div>
+    <div class="settings-list" style="margin-bottom:16px">${autoLockHtml}</div>
+    <div class="settings-group-title">${t.sessionTimeout}</div>
+    <div class="settings-list">${sessionHtml}</div>
+    <div class="modal-buttons">
+      <button class="btn-primary" onclick="closeModal()">${t.save}</button>
+    </div>
+  `);
+}
+
+function setAutoLock(ms){
+  us.autoLock = ms;
+  saveS();
+  resetAutoLockTimer();
+  openSecuritySettingsModal();
+  renderSecurityStatus();
+}
+
+function setSessionTimeout(ms){
+  us.sessionTimeout = ms;
+  saveS();
+  resetSessionTimer();
+  openSecuritySettingsModal();
+  renderSecurityStatus();
+}
+
+// ============ ONBOARDING ============
+function buildOB(){const t=T[lang];const pts=[{i:'<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',t:t.onbPoint1Title,d:t.onbPoint1Desc},{i:'<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>',t:t.onbPoint2Title,d:t.onbPoint2Desc},{i:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/></svg>',t:t.onbPoint4Title,d:t.onbPoint4Desc},{i:'<svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/></svg>',t:t.onbPoint5Title,d:t.onbPoint5Desc}];document.getElementById('onboardingPoints').innerHTML=pts.map(p=>`<div class="onboarding-point"><div class="onboarding-point-icon">${p.i}</div><div class="onboarding-point-content"><div class="onboarding-point-title">${p.t}</div><div class="onboarding-point-desc">${p.d}</div></div></div>`).join('')}
+function showOnboarding(){buildOB();document.getElementById('readCheckbox').checked=false;document.getElementById('readCheckboxLabel').classList.remove('checked');document.getElementById('startBtn').disabled=true;document.getElementById('onboarding').classList.add('show')}
+function toggleReadCheckbox(){const c=document.getElementById('readCheckbox'),l=document.getElementById('readCheckboxLabel'),b=document.getElementById('startBtn');c.checked=!c.checked;l.classList.toggle('checked',c.checked);b.disabled=!c.checked}
+function finishOnboarding(){if(!cu)return;localStorage.setItem('bujo_onboarding_'+cu.username,'1');document.getElementById('onboarding').classList.remove('show')}
+function checkOB(){if(!cu)return;if(!localStorage.getItem('bujo_onboarding_'+cu.username))setTimeout(showOnboarding,400)}
+
+function showPage(p,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+p).classList.add('active');document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');renderAll();if(p==='settings'){updateUser();updateSD();renderSecurityStatus()}window.scrollTo({top:0,behavior:'smooth'})}
+
+const delSVG='<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+function dk(d=new Date()){return d.toISOString().split('T')[0]}
+function esc(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML}
+
+function renderWeeklyChart(){const t=T[lang],today=new Date(),days=[];for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);days.push(d)}let maxV=1;const vals=days.map(d=>{const k=dk(d),items=data.daily[k]||[];const c=items.filter(i=>(i.type==='task'||i.type==='priority')&&i.status==='completed').length;if(c>maxV)maxV=c;return c});const dayNames=lang==='fa'?['ش','ی','د','س','چ','پ','ج']:['S','M','T','W','T','F','S'];let html=`<div class="chart-container"><div class="chart-title">${t.weeklyProgress}</div><div class="bar-chart">`;days.forEach((d,i)=>{const pct=Math.round(vals[i]/maxV*100);const dn=dayNames[d.getDay()];html+=`<div class="bar-col"><div class="bar-value">${vals[i]}</div><div class="bar-wrapper"><div class="bar" style="height:${Math.max(pct,4)}%"></div></div><div class="bar-label">${dn}</div></div>`});html+=`</div></div>`;document.getElementById('weeklyChart').innerHTML=html}
+
+function renderGoals(){const t=T[lang],list=document.getElementById('goalsList'),goals=data.goals||[];let chartHtml='';if(goals.length>0){chartHtml=`<div class="chart-container"><div class="chart-title">${t.goalsOverview}</div>`;goals.slice(0,5).forEach(g=>{chartHtml+=`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="font-weight:500">${esc(g.title)}</span><span style="color:var(--accent);font-weight:600">${g.progress}%</span></div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${g.progress}%;background:${g.color||'var(--accent)'}"></div></div></div>`});chartHtml+=`</div>`}document.getElementById('goalsChart').innerHTML=chartHtml;if(!goals.length){list.innerHTML=`<div class="empty-state"><div class="empty-state-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div>${t.noItems}</div></div>`;return}list.innerHTML=goals.map(g=>{const ms=(g.milestones||[]).map((m,i)=>`<div class="milestone"><div class="milestone-dot ${m.done?'done':''}" onclick="toggleMilestone(${g.id},${i})"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><span class="milestone-text ${m.done?'done':''}">${esc(m.text)}</span></div>`).join('');return`<div class="goal-card" onclick="openGoalModal(${g.id})"><div class="goal-header"><div style="display:flex;gap:8px;align-items:flex-start;flex:1"><div class="goal-color-dot" style="background:${g.color||'var(--accent)'}"></div><div class="goal-title">${esc(g.title)}</div></div><div class="goal-percent">${g.progress}%</div></div>${g.startDate||g.endDate?`<div class="goal-dates">${g.startDate||''} → ${g.endDate||''}</div>`:''}<div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${g.progress}%;background:${g.color||'var(--accent)'}"></div></div>${ms?`<div class="goal-milestones">${ms}</div>`:''}</div>`}).join('')}
+
+function openGoalModal(id){const t=T[lang],g=id?data.goals.find(x=>x.id===id):null;selectedGoalColor=g?g.color:goalColors[0];const colorsHtml=goalColors.map(c=>`<div class="color-option ${g&&g.color===c?'selected':''}" style="background:${c}" onclick="selectGoalColor('${c}',this)"></div>`).join('');openModal(`<h3>${g?esc(g.title):t.newGoal}</h3><div class="form-group"><label class="form-label">${t.goalTitle}</label><input type="text" class="form-input" id="goalTitleInput" value="${g?esc(g.title):''}"></div><div class="form-group"><label class="form-label">${t.goalDesc}</label><input type="text" class="form-input" id="goalDescInput" value="${g?esc(g.description||''):''}"></div><div class="slider-container"><label><span>${t.goalProgress}</span><span id="goalProgressVal">${g?g.progress:0}%</span></label><input type="range" min="0" max="100" value="${g?g.progress:0}" oninput="document.getElementById('goalProgressVal').textContent=this.value+'%'"></div><div class="form-group"><label class="form-label">${t.goalColor}</label><div class="color-picker-row" id="goalColorPicker">${colorsHtml}</div></div><div style="display:flex;gap:8px"><div class="form-group" style="flex:1"><label class="form-label">${t.goalStart}</label><input type="date" class="form-input" id="goalStartInput" value="${g?g.startDate||'':''}"></div><div class="form-group" style="flex:1"><label class="form-label">${t.goalEnd}</label><input type="date" class="form-input" id="goalEndInput" value="${g?g.endDate||'':''}"></div></div><div class="form-group"><label class="form-label">${t.goalMilestones}</label><textarea class="form-input" id="goalMilestonesInput" rows="3" placeholder="${t.goalMilestones}">${g?(g.milestones||[]).map(m=>m.text).join('\n'):''}</textarea></div><div class="modal-buttons">${g?`<button class="btn-danger" onclick="deleteGoal(${g.id})">${t.delete}</button>`:''}<button class="btn-secondary" onclick="closeModal()">${t.cancel}</button><button class="btn-primary" onclick="saveGoal(${id||0})">${t.save}</button></div>`)}
+let selectedGoalColor=goalColors[0];
+function selectGoalColor(c,el){selectedGoalColor=c;document.querySelectorAll('.color-option').forEach(x=>x.classList.remove('selected'));el.classList.add('selected')}
+function saveGoal(id){const title=document.getElementById('goalTitleInput').value.trim();if(!title)return;const desc=document.getElementById('goalDescInput').value.trim();const progress=parseInt(document.querySelector('.slider-container input').value);const start=document.getElementById('goalStartInput').value;const end=document.getElementById('goalEndInput').value;const msText=document.getElementById('goalMilestonesInput').value.trim();const milestones=msText?msText.split('\n').filter(x=>x.trim()).map(x=>{const existing=id?(data.goals.find(g=>g.id===id)||{}).milestones||[]:[];const found=existing.find(m=>m.text===x.trim());return{text:x.trim(),done:found?found.done:false}}):[];if(id){const g=data.goals.find(x=>x.id===id);if(g){g.title=title;g.description=desc;g.progress=progress;g.color=selectedGoalColor;g.startDate=start;g.endDate=end;g.milestones=milestones}}else{data.goals.push({id:Date.now(),title,description:desc,progress,color:selectedGoalColor,startDate:start,endDate:end,milestones,createdAt:new Date().toISOString()})}saveD();closeModal();renderGoals();renderStats()}
+function deleteGoal(id){if(!confirm(T[lang].delete+'?'))return;data.goals=data.goals.filter(g=>g.id!==id);saveD();closeModal();renderGoals();renderStats()}
+function toggleMilestone(gid,mi){const g=data.goals.find(x=>x.id===gid);if(!g||!g.milestones[mi])return;g.milestones[mi].done=!g.milestones[mi].done;const total=g.milestones.length;const done=g.milestones.filter(m=>m.done).length;g.progress=total>0?Math.round(done/total*100):g.progress;saveD();renderGoals()}
+
+function openSearch(){document.getElementById('searchOverlay').classList.add('show');document.getElementById('searchPanel').classList.add('show');document.getElementById('searchInput').value='';document.getElementById('searchInput').focus();performSearch()}
+function closeSearch(){document.getElementById('searchOverlay').classList.remove('show');document.getElementById('searchPanel').classList.remove('show')}
+function setSearchFilter(f,btn){searchFilter=f;document.querySelectorAll('.search-filter').forEach(x=>x.classList.remove('active'));btn.classList.add('active');performSearch()}
+function performSearch(){const q=document.getElementById('searchInput').value.trim().toLowerCase();const t=T[lang];const results=[];if(!q){document.getElementById('searchResults').innerHTML=`<div class="search-empty">${t.searchPlaceholder}</div>`;return}Object.entries(data.daily).forEach(([date,items])=>{items.forEach(item=>{if(searchFilter==='all'||searchFilter===item.type){if(item.text.toLowerCase().includes(q)){results.push({type:item.type,text:item.text,meta:date,icon:item.symbol,bg:'var(--accent-bg)',color:'var(--accent)'})}}})});if(searchFilter==='all'||searchFilter==='collection'){(data.collections||[]).forEach(c=>{if(c.name.toLowerCase().includes(q)){results.push({type:'collection',text:c.name,meta:c.items.length+' '+t.items,icon:'📚',bg:'#f5e6dc',color:'#b85c38'})}c.items.forEach(item=>{if(item.text.toLowerCase().includes(q)){results.push({type:'collection',text:item.text,meta:c.name,icon:'•',bg:'#f5e6dc',color:'#b85c38'})}})})}if(searchFilter==='all'||searchFilter==='goal'){(data.goals||[]).forEach(g=>{if(g.title.toLowerCase().includes(q)||(g.description||'').toLowerCase().includes(q)){results.push({type:'goal',text:g.title,meta:g.progress+'%',icon:'🎯',bg:'var(--accent-bg)',color:'var(--accent)'})}})}if(!results.length){document.getElementById('searchResults').innerHTML=`<div class="search-empty">${t.noResults}</div>`;return}document.getElementById('searchResults').innerHTML=results.slice(0,20).map(r=>`<div class="search-result-item"><div class="search-result-icon" style="background:${r.bg};color:${r.color}">${r.icon}</div><div class="search-result-content"><div class="search-result-text">${esc(r.text)}</div><div class="search-result-meta">${esc(r.meta)}</div></div></div>`).join('')}
+
+function addDailyItem(){const i=document.getElementById('dailyInput'),t=i.value.trim();if(!t)return;const k=dk();if(!data.daily[k])data.daily[k]=[];data.daily[k].push({id:Date.now(),text:t,symbol:ss,type:st,status:'active',createdAt:new Date().toISOString()});i.value='';saveD();renderDaily()}
+function cycleDS(k,id){const i=data.daily[k].find(x=>x.id===id);if(!i)return;const c={task:['active','completed','migrated','scheduled'],event:['active'],note:['active'],priority:['active','completed'],inspiration:['active']};const s=c[i.type]||['active'];i.status=s[(s.indexOf(i.status)+1)%s.length];saveD();renderDaily()}
+function delDI(k,id){data.daily[k]=data.daily[k].filter(x=>x.id!==id);saveD();renderDaily()}
+function getSD(i){if(i.status==='completed')return'×';if(i.status==='migrated')return'›';if(i.status==='scheduled')return'‹';return i.symbol}
+function renderDaily(){const k=dk(),items=data.daily[k]||[],list=document.getElementById('dailyList'),t=T[lang];const tasks=items.filter(i=>i.type==='task'||i.type==='priority');document.getElementById('statTasks').textContent=tasks.length;document.getElementById('statCompleted').textContent=tasks.filter(i=>i.status==='completed').length;if(!items.length){list.innerHTML=`<div class="empty-state"><div class="empty-state-icon"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/></svg></div><div>${t.noItems}</div></div>`;return}list.innerHTML=items.map(i=>{const tc=i.status==='completed'?'completed':i.status==='migrated'?'migrated':'';const sc=i.status==='completed'?'completed':(i.status==='migrated'||i.status==='scheduled')?'migrated':'';return`<div class="bullet-item"><div class="bullet-symbol ${sc}" onclick="cycleDS('${k}',${i.id})">${getSD(i)}</div><div class="bullet-content"><div class="bullet-text ${tc}">${esc(i.text)}</div><div class="bullet-meta">${new Date(i.createdAt).toLocaleTimeString(lang==='fa'?'fa-IR':'en-US',{hour:'2-digit',minute:'2-digit'})}</div></div><button class="delete-btn" onclick="delDI('${k}',${i.id})">${delSVG}</button></div>`}).join('')}
+document.querySelectorAll('.symbol-btn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.symbol-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');ss=b.dataset.symbol;st=b.dataset.type})});
+
+function renderFuture(){const t=T[lang],l=document.getElementById('futureList'),s=document.getElementById('futureMonthSelect'),now=new Date();s.innerHTML='';for(let i=1;i<=6;i++){const d=new Date(now.getFullYear(),now.getMonth()+i,1);let lb;try{lb=d.toLocaleDateString(lang==='fa'?'fa-IR':'en-US',{month:'long',year:'numeric'})}catch(e){lb=t.months[d.getMonth()]+' '+d.getFullYear()}s.innerHTML+=`<option value="${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}">${lb}</option>`}if(!data.future.length){l.innerHTML=`<div class="empty-state"><div>${t.noItems}</div></div>`;return}const g={};data.future.forEach(i=>{if(!g[i.month])g[i.month]=[];g[i.month].push(i)});l.innerHTML=Object.keys(g).sort().map(m=>`<div class="future-month-group"><div class="future-month-title">${m}</div>${g[m].map(i=>`<div class="bullet-item"><div class="bullet-symbol">O</div><div class="bullet-content"><div class="bullet-text">${esc(i.text)}</div></div><button class="delete-btn" onclick="delFI(${i.id})">${delSVG}</button></div>`).join('')}</div>`).join('')}
+function addFutureItem(){const ti=document.getElementById('futureTitleInput'),ms=document.getElementById('futureMonthSelect'),t=ti.value.trim();if(!t)return;data.future.push({id:Date.now(),text:t,month:ms.value});ti.value='';saveD();renderFuture()}
+function delFI(id){data.future=data.future.filter(i=>i.id!==id);saveD();renderFuture()}
+
+function renderHabits(){const t=T[lang],l=document.getElementById('habitsList');if(!data.habits.length){l.innerHTML=`<div class="empty-state"><div>${t.noItems}</div></div>`;return}const today=new Date(),days=[];for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);days.push(d)}l.innerHTML=data.habits.map(h=>{const dh=days.map(d=>{const k=dk(d),dn=h.days&&h.days.includes(k),it=d.toDateString()===today.toDateString();return`<div class="habit-day ${dn?'done':''} ${it?'today':''}" onclick="togHD(${h.id},'${k}')">${d.getDate()}</div>`}).join('');return`<div class="habit-item"><div class="habit-name"><span>${esc(h.name)}</span><button class="habit-delete" onclick="delH(${h.id})">${delSVG}</button></div><div class="habit-grid">${dh}</div></div>`}).join('')}
+function addHabit(){const i=document.getElementById('habitInput'),n=i.value.trim();if(!n)return;data.habits.push({id:Date.now(),name:n,days:[]});i.value='';saveD();renderHabits()}
+function delH(id){data.habits=data.habits.filter(h=>h.id!==id);saveD();renderHabits()}
+function togHD(hid,k){const h=data.habits.find(x=>x.id===hid);if(!h.days)h.days=[];const i=h.days.indexOf(k);if(i>=0)h.days.splice(i,1);else h.days.push(k);saveD();renderHabits()}
+
+function renderCollections(){const t=T[lang],l=document.getElementById('collectionsList');if(!data.collections.length){l.innerHTML=`<div class="empty-state"><div>${t.noItems}</div></div>`;return}l.innerHTML=data.collections.map(c=>`<div class="collection-card" onclick="viewCol(${c.id})"><h4>${esc(c.name)}</h4><p>${c.items.length} ${t.items}</p></div>`).join('')}
+function openCollectionModal(){const t=T[lang];openModal(`<h3>${t.newCollection}</h3><input type="text" class="form-input" id="colTitle" placeholder="${t.newCollection}"><textarea class="form-input" id="colItems" rows="4"></textarea><div class="modal-buttons"><button class="btn-secondary" onclick="closeModal()">${t.cancel}</button><button class="btn-primary" onclick="saveCol()">${t.save}</button></div>`)}
+function saveCol(){const n=document.getElementById('colTitle').value.trim(),it=document.getElementById('colItems').value.trim();if(!n)return;const items=it?it.split('\n').filter(x=>x.trim()).map(x=>({text:x.trim(),done:false})):[];data.collections.push({id:Date.now(),name:n,items});saveD();closeModal();renderCollections()}
+function viewCol(id){const c=data.collections.find(x=>x.id===id);if(!c)return;const t=T[lang];const ih=c.items.map((item,i)=>`<div class="bullet-item"><div class="bullet-symbol ${item.done?'completed':''}" onclick="togCI(${id},${i})">${item.done?'×':'•'}</div><div class="bullet-content"><div class="bullet-text ${item.done?'completed':''}">${esc(item.text)}</div></div><button class="delete-btn" onclick="delCI(${id},${i})">${delSVG}</button></div>`).join('');openModal(`<h3>${esc(c.name)}</h3><div style="max-height:50vh;overflow-y:auto">${ih||t.noItems}</div><div class="add-form" style="margin-top:14px"><input type="text" id="newCI" placeholder="${t.addEntry}"><button onclick="addCI(${id})">${t.add}</button></div><div class="modal-buttons"><button class="btn-secondary" onclick="closeModal()">${t.save}</button><button class="btn-danger" onclick="delCol(${id})">${t.delete}</button></div>`)}
+function addCI(id){const i=document.getElementById('newCI'),t=i.value.trim();if(!t)return;data.collections.find(x=>x.id===id).items.push({text:t,done:false});saveD();viewCol(id);renderCollections()}
+function togCI(id,i){const c=data.collections.find(x=>x.id===id);c.items[i].done=!c.items[i].done;saveD();viewCol(id)}
+function delCI(id,i){data.collections.find(x=>x.id===id).items.splice(i,1);saveD();viewCol(id);renderCollections()}
+function delCol(id){if(!confirm(T[lang].delete+'?'))return;data.collections=data.collections.filter(c=>c.id!==id);saveD();closeModal();renderCollections()}
+
+function openAvatarModal(){const t=T[lang],users=gU(),av=users[cu.username].avatar||{type:'default',index:0};const ah=avatars.map((a,i)=>`<div class="avatar-option ${av.type==='default'&&av.index===i?'selected':''}" onclick="selAv('default',${i})" style="background:${a.bg}">${avSVG(a.p,a.bg,80)}</div>`).join('');openModal(`<h3>${t.chooseAvatar}</h3><div class="avatar-picker-grid">${ah}</div><button class="upload-avatar-btn" onclick="document.getElementById('avUp').click()"><svg viewBox="0 0 24 24"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>${t.uploadImage}</button><input type="file" id="avUp" accept="image/*" style="display:none" onchange="upAv(event)"><div class="modal-buttons"><button class="btn-secondary" onclick="closeModal()">${t.cancel}</button></div>`)}
+function selAv(t,i){const u=gU();u[cu.username].avatar={type:t,index:i};sU(u);updateUser();closeModal();showToast(T[lang].profileUpdated)}
+function upAv(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=200;c.height=200;const ctx=c.getContext('2d');const m=Math.min(img.width,img.height);ctx.drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,200,200);const u=gU();u[cu.username].avatar={type:'image',data:c.toDataURL('image/jpeg',.8)};sU(u);updateUser();closeModal();showToast(T[lang].profileUpdated)};img.src=ev.target.result};r.readAsDataURL(f)}
+function openThemeModal(){const t=T[lang],tc={forest:'#2d4a3e',ocean:'#1e4d6b',sunset:'#b85c38',plum:'#6b4e71',night:'#1a1a1a'};const th=Object.entries(themes).map(([k,v])=>`<div class="theme-option ${us.theme===k?'selected':''}" onclick="selTheme('${k}')"><div class="theme-preview" style="background:${tc[k]}"></div><div class="theme-name">${v.name[lang]}</div></div>`).join('');openModal(`<h3>${t.chooseTheme}</h3><div class="theme-grid">${th}</div><div class="modal-buttons"><button class="btn-secondary" onclick="closeModal()">${t.cancel}</button></div>`)}
+function selTheme(k){us.theme=k;saveS();applyTheme();updateSD();closeModal()}
+function openEditProfileModal(){const t=T[lang];openModal(`<h3>${t.editProfileTitle}</h3><div class="form-group"><label class="form-label">${t.displayName}</label><input type="text" class="form-input" id="edDN" value="${esc(cu.displayName)}"></div><div class="modal-buttons"><button class="btn-secondary" onclick="closeModal()">${t.cancel}</button><button class="btn-primary" onclick="saveProf()">${t.save}</button></div>`)}
+function saveProf(){const n=document.getElementById('edDN').value.trim();if(!n)return;const u=gU();u[cu.username].displayName=n;sU(u);cu.displayName=n;localStorage.setItem('bujo_session',JSON.stringify(cu));updateUser();closeModal();showToast(T[lang].profileUpdated)}
+
+function openChangePasswordModal(){
+  const t=T[lang];
+  openModal(`<h3>${t.changePasswordTitle}</h3>
+  <div class="form-group"><label class="form-label">${t.currentPassword}</label><input type="password" class="form-input" id="curPw" autocomplete="current-password"></div>
+  <div class="form-group"><label class="form-label">${t.newPassword}</label><input type="password" class="form-input" id="newPw" autocomplete="new-password" oninput="checkPwStrength(this.value)"><div class="pw-strength" id="pwStrengthChange"><div class="pw-strength-bar"><div class="pw-strength-fill"></div></div><div class="pw-strength-text"></div></div></div>
+  <div class="form-group"><label class="form-label">${t.confirmNewPassword}</label><input type="password" class="form-input" id="cfPw" autocomplete="new-password"></div>
+  <div id="pwErr" style="color:var(--danger);font-size:12px;display:none"></div>
+  <div class="modal-buttons"><button class="btn-secondary" onclick="closeModal()">${t.cancel}</button><button class="btn-primary" onclick="savePw()">${t.save}</button></div>`);
+}
+
+async function savePw(){
+  const t=T[lang];
+  const c=document.getElementById('curPw').value;
+  const n=document.getElementById('newPw').value;
+  const cf=document.getElementById('cfPw').value;
+  const e=document.getElementById('pwErr');
+  const u=gU();
+  const user = u[cu.username];
+  
+  const ch = await hashPassword(c, user.salt);
+  if(ch !== user.password){
+    e.textContent=t.errWrongCurrentPassword;
+    e.style.display='block';
+    return;
+  }
+  if(n.length < SEC.MIN_PASSWORD_LENGTH){
+    e.textContent=t.errMinPassword;
+    e.style.display='block';
+    return;
+  }
+  if(n!==cf){
+    e.textContent=t.errPasswordMismatch;
+    e.style.display='block';
+    return;
+  }
+  
+  // Re-encrypt data with new password
+  const newPwSaltBytes = getRandomBytes(SEC.SALT_LENGTH);
+  const newCryptoSaltBytes = getRandomBytes(SEC.SALT_LENGTH);
+  
+  const newHashedPw = await hashPassword(n, bufToB64(newPwSaltBytes));
+  const newCryptoKey = await deriveCryptoKey(n, newCryptoSaltBytes);
+  
+  // Re-encrypt existing data
+  const newEncrypted = await encryptData(data, newCryptoKey);
+  
+  // Update user record
+  user.password = newHashedPw;
+  user.salt = bufToB64(newPwSaltBytes);
+  user.cryptoSalt = bufToB64(newCryptoSaltBytes);
+  sU(u);
+  
+  // Save re-encrypted data
+  localStorage.setItem('bujo_encdata_' + cu.username, JSON.stringify(newEncrypted));
+  
+  // A PIN's wrapped key protects the OLD crypto key. We don't have the PIN's
+  // plaintext here to re-wrap it with the new key, so the old PIN must be
+  // invalidated rather than left silently pointing at a stale key.
+  const hadPin = !!user.pin;
+  if(hadPin){
+    delete user.pin;
+    delete user.pinSalt;
+    delete user.pinWrappedKey;
+  }
+  sU(u);
+  
+  // Update in-memory key
+  cryptoKey = newCryptoKey;
+  
+  closeModal();
+  showToast(hadPin ? (t.passwordChanged + ' — ' + t.pinRemoved) : t.passwordChanged);
+}
+
+async function exportData(){
+  const t=T[lang];
+  // Export encrypted backup (requires password to restore)
+  const users = getUsers();
+  const user = users[cu.username];
+  
+  const o = {
+    version: '4.0.0',
+    username: cu.username,
+    displayName: cu.displayName,
+    encrypted: true,
+    cryptoSalt: user.cryptoSalt,
+    exportedAt: new Date().toISOString(),
+    data: await encryptData(data, cryptoKey),
+    settings: us
+  };
+  
+  const b = new Blob([JSON.stringify(o, null, 2)], {type:'application/json'});
+  const u = URL.createObjectURL(b);
+  const a = document.createElement('a');
+  a.href = u;
+  a.download = `bujo-encrypted-${cu.username}-${dk()}.json`;
+  a.click();
+  URL.revokeObjectURL(u);
+  showToast(t.dataExported);
+}
+
+async function importData(e){
+  const t=T[lang];
+  const f=e.target.files[0];
+  if(!f)return;
+  if(!confirm(t.confirmImport)){e.target.value='';return}
+  
+  const r = new FileReader();
+  r.onload = async (ev) => {
+    try {
+      const d = JSON.parse(ev.target.result);
+      
+      if(d.encrypted){
+        // Encrypted backup - need password to decrypt
+        const pw = prompt(lang==='fa'?'رمز عبور فایل پشتیبان:':'Backup file password:');
+        if(!pw){e.target.value='';return}
+        
+        const tempKey = await deriveCryptoKey(pw, b64ToBuf(d.cryptoSalt));
+        const decrypted = await decryptData(d.data, tempKey);
+        
+        if(!decrypted){
+          showToast(t.invalidFile);
+          e.target.value='';
+          return;
+        }
+        
+        // Re-encrypt with current user's key
+        data = decrypted;
+        ['daily','future','habits','collections','goals'].forEach(k=>{
+          if(!data[k]) data[k]=k==='daily'?{}:[];
+        });
+        
+        if(d.settings){
+          us = {...us, ...d.settings};
+          saveS();
+          applyTheme();
+        }
+        
+        await saveD();
+        renderAll();
+        updateUser();
+        showToast(t.dataImported);
+      } else {
+        showToast(t.invalidFile);
+      }
+    } catch(err) {
+      console.error(err);
+      showToast(t.invalidFile);
+    }
+    e.target.value='';
+  };
+  r.readAsText(f);
+}
+
+async function clearAllData(){
+  const t=T[lang];
+  if(!confirm(t.confirmClearData))return;
+  data={daily:{},future:[],habits:[],collections:[],goals:[]};
+  await saveD();
+  renderAll();
+  updateUser();
+  showToast(t.dataCleared);
+}
+
+async function deleteAccount(){
+  const t=T[lang];
+  if(!confirm(t.confirmDeleteAccount))return;
+  const u=gU();
+  delete u[cu.username];
+  sU(u);
+  ['bujo_encdata_','bujo_data_','bujo_settings_','bujo_onboarding_'].forEach(k=>localStorage.removeItem(k+cu.username));
+  localStorage.removeItem('bujo_session');
+  
+  // Clear crypto key from memory
+  cryptoKey = null;
+  if(autoLockTimer) clearTimeout(autoLockTimer);
+  if(sessionTimer) clearTimeout(sessionTimer);
+  
+  cu=null;data={};us={};
+  document.getElementById('appScreen').classList.remove('active');
+  document.getElementById('authScreen').classList.remove('hidden');
+  showToast(t.accountDeleted);
+}
+
+function renderAll(){renderDaily();renderWeeklyChart();renderFuture();renderHabits();renderGoals();renderCollections()}
+document.getElementById('dailyInput').addEventListener('keypress',e=>{if(e.key==='Enter')addDailyItem()});
+document.getElementById('habitInput').addEventListener('keypress',e=>{if(e.key==='Enter')addHabit()});
+document.getElementById('lockPwInput').addEventListener('keypress',e=>{if(e.key==='Enter')unlockWithPassword()});
+
+(async function init(){
+  applyT();
+  setupActivityTracking();
+  const s=localStorage.getItem('bujo_session');
+  if(s){
+    try{
+      cu=JSON.parse(s);
+      const u=gU();
+      if(u[cu.username]){
+        // Session exists but we need password to derive crypto key
+        // Show lock screen immediately
+        loadSettings();
+        document.getElementById('authScreen').classList.add('hidden');
+        document.getElementById('appScreen').classList.add('active');
+        updateUser();
+        applyT();
+        showLockScreen();
+        return;
+      }
+    }catch(e){}
+    localStorage.removeItem('bujo_session');
+  }
+  document.getElementById('authScreen').classList.remove('hidden');
+})();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
